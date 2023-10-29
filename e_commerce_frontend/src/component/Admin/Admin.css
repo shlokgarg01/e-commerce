@@ -1,0 +1,4 @@
+#productReviewCount:hover {
+  cursor: pointer !important;
+  color: blue;
+}
