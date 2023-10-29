@@ -1,0 +1,2 @@
+version: 1
+postBuildCommand: npm run postbuild
