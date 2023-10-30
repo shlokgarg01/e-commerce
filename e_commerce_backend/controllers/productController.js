@@ -301,3 +301,14 @@ exports.deleteReview = catchAsyncErrors(async (req, res, next) => {
     message: "Review Deleted successfully",
   });
 });
+
+// get suggested products
+exports.getSuggestedProducts = catchAsyncErrors(async (req, res) => {
+  const products = await Product.find({}).limit(15)
+
+  return res.status(200).json({
+    success: true,
+    products,
+    productsCount: products.length,
+  });
+});

@@ -13,6 +13,7 @@ const {
   getAdminProducts,
   getMostOrderedProducts,
   getCategoryProducts,
+  getSuggestedProducts,
 } = require("../controllers/productController");
 const { isAuthenticatedUser, authorizeRoles } = require("../middleware/auth");
 const router = express.Router();
@@ -21,6 +22,7 @@ router.route("/products").get(getAllProducts);
 router.route("/products/trending").get(getTrendingProducts);
 router.route("/products/favourite").get(getFavouriteProducts);
 router.route("/products/mostOrdered").get(getMostOrderedProducts)
+router.route("/products/suggested").get(getSuggestedProducts)
 router.route("/product/:id").get(getProductDetails);
 router.route("/product/category/:id").get(getCategoryProducts)
 router
