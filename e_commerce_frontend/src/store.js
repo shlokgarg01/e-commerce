@@ -69,12 +69,11 @@ const reducer = combineReducers({
 
 let initialState = {};
 const middleware = [thunk];
-const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
 
 const store = createStore(
   reducer,
   initialState,
-  composeEnhancer(applyMiddleware(...middleware))
+  applyMiddleware(...middleware)
 );
 
 export default store;
