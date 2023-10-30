@@ -6,8 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node e_commerce_backend/server.js",
-    "dev": "nodemon e_commerce_backend/server.js",
-    "postbuild": "NPM_CONFIG_PRODUCTION=false && npm install --prefix e_commerce_frontend && npm run build --prefix e_commerce_frontend"
+    "dev": "nodemon e_commerce_backend/server.js"
   },
   "keywords": [],
   "author": "",
