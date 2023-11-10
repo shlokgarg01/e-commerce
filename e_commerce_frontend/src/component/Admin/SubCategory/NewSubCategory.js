@@ -14,8 +14,8 @@ const NewSubCategory = () => {
 
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
-  const [images, setImages] = useState([]);
-  const [imagePreview, setImagesPreview] = useState([]);
+  // const [images, setImages] = useState([]);
+  // const [imagePreview, setImagesPreview] = useState([]);
 
   const { loading, error, success } = useSelector((state) => state.newSubCategory);
   const { categories } = useSelector((state) => state.categories);
@@ -43,29 +43,29 @@ const NewSubCategory = () => {
     myForm.set("name", name);
     myForm.set("category", category);
 
-    images.forEach((image) => {
-      myForm.append("image", image);
-    });
+    // images.forEach((image) => {
+    //   myForm.append("image", image);
+    // });
     dispatch(createSubCategory(myForm));
   };
 
-  const createSubCategoryImageChange = (e) => {
-    const files = Array.from(e.target.files);
+  // const createSubCategoryImageChange = (e) => {
+  //   const files = Array.from(e.target.files);
 
-    setImages([]);
-    setImagesPreview([]);
+  //   setImages([]);
+  //   setImagesPreview([]);
 
-    files.forEach((file) => {
-      const reader = new FileReader();
-      reader.onload = () => {
-        if (reader.readyState === 2) {
-          setImagesPreview(() => [reader.result]);
-          setImages(() => [reader.result]);
-        }
-      };
-      reader.readAsDataURL(file);
-    });
-  };
+  //   files.forEach((file) => {
+  //     const reader = new FileReader();
+  //     reader.onload = () => {
+  //       if (reader.readyState === 2) {
+  //         setImagesPreview(() => [reader.result]);
+  //         setImages(() => [reader.result]);
+  //       }
+  //     };
+  //     reader.readAsDataURL(file);
+  //   });
+  // };
 
   return (
     <Fragment>
@@ -112,8 +112,8 @@ const NewSubCategory = () => {
                   </select>
                 </div>
               </div>
-              <div className="input-group mb-3">
-                <input
+              {/* <div className="input-group mb-3"> */}
+                {/* <input
                   type="file"
                   className="form-control"
                   name="sub_category_image"
@@ -133,7 +133,7 @@ const NewSubCategory = () => {
                     alt="SubCategory"
                   />
                 ))}
-              </div>
+              </div> */}
 
               <input
                 disabled={loading ? true : false}

@@ -3,18 +3,14 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   getAllUsers,
   clearErrors,
-  // deleteUser
 } from "../../../actions/userAction";
 import { useAlert } from "react-alert";
 import MetaData from "../../layout/MetaData";
-import { useNavigate } from "react-router-dom";
 import { Capitalize } from '../../../helpers/StringHelpers'
-// import { DELETE_USER_RESET } from "../../constants/userConstants";
 
 const UsersList = () => {
   const alert = useAlert();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const { error, users, loading } = useSelector((state) => state.allUsers);
   const { error: deleteError, isDeleted } = useSelector(
@@ -62,7 +58,6 @@ const UsersList = () => {
                         <th scope="col">Email</th>
                         <th scope="col">Contact Number</th>
                         <th scope="col">Role</th>
-                        <th scope="col">Action</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -85,16 +80,6 @@ const UsersList = () => {
                             }
                           >
                             {Capitalize(user.role)}
-                          </td>
-                          <td>
-                            <input
-                              onClick={() =>
-                                navigate(`/admin/user/${user._id}`)
-                              }
-                              readOnly
-                              value="Edit"
-                              className="w-lg-50 btn btn-sm btn-primary"
-                            />
                           </td>
                           {/* <td><Link onClick={() => deleteUserHandler(user._id)}>Delete</Link></td> */}
                         </tr>

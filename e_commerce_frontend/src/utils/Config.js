@@ -1,3 +1,4 @@
-export const BASE_URL = "http://localhost:4000"
+export const BASE_URL = "https://e-commerce-d01f.onrender.com"
 
 // http://192.168.1.9:4000
+// https://e-commerce-d01f.onrender.com

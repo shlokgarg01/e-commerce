@@ -5,7 +5,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllCategories, clearErrors } from "../../../actions/categoryAction";
 import { useNavigate, useParams } from "react-router-dom";
 import { UPDATE_PRODUCT_RESET } from "../../../constants/productConstants";
-import { updateProduct, getProductDetails } from "../../../actions/productAction";
+import {
+  updateProduct,
+  getProductDetails,
+} from "../../../actions/productAction";
+import { getSubCategoryByCategory } from "../../../actions/subCategoryAction";
 
 const UpdateProduct = () => {
   const dispatch = useDispatch();
@@ -19,11 +23,18 @@ const UpdateProduct = () => {
   const [description, setDescription] = useState("");
   const [stock, setStock] = useState();
   const [category, setCategory] = useState("");
+  const [subCategory, setSubCategory] = useState("");
+  const [favourite, setFavourite] = useState(false);
+  const [trending, setTrending] = useState(false);
   const [images, setImages] = useState([]);
   const [oldImages, setOldImages] = useState([]);
   const [imagePreview, setImagesPreview] = useState([]);
 
   const { categories } = useSelector((state) => state.categories);
+  const { subCategories } = useSelector(
+    (state) => state.subCategoriesByCategory
+  );
+
   const {
     loading,
     error: updateError,
@@ -42,6 +53,9 @@ const UpdateProduct = () => {
       setDiscount(product.discount);
       setStock(product.stock);
       setCategory(product.category);
+      setSubCategory(product.subCategory.name);
+      setTrending(product.trending);
+      setFavourite(product.favourite);
       setOldImages(product.images);
     }
 
@@ -61,7 +75,16 @@ const UpdateProduct = () => {
     }
 
     dispatch(getAllCategories());
-  }, [dispatch, error, alert, isUpdated, product, productId, updateError, navigate]);
+  }, [
+    dispatch,
+    error,
+    alert,
+    isUpdated,
+    product,
+    productId,
+    updateError,
+    navigate,
+  ]);
 
   const submitForm = (e) => {
     e.preventDefault();
@@ -73,6 +96,9 @@ const UpdateProduct = () => {
     myForm.set("description", description);
     myForm.set("stock", stock);
     myForm.set("category", category);
+    myForm.set("subCategory", subCategory);
+    myForm.set("trending", trending);
+    myForm.set("favourite", favourite);
 
     images.forEach((image) => {
       myForm.append("images", image);
@@ -98,6 +124,10 @@ const UpdateProduct = () => {
       reader.readAsDataURL(file);
     });
   };
+
+  const fetchSubCategories = async (category_id) => {
+    dispatch(getSubCategoryByCategory(category_id))
+  }
 
   return (
     <Fragment>
@@ -185,16 +215,73 @@ const UpdateProduct = () => {
                 <label className="form-label">Category</label>
                 <select
                   value={category}
-                  onChange={(e) => setCategory(e.target.value)}
+                  onChange={(e) => {
+                    const selected_element = e.target.childNodes[e.target.selectedIndex]
+                    const category_id =  selected_element.getAttribute('id');
+                    setCategory(e.target.value)
+                    fetchSubCategories(category_id)
+                  }}
                   className="form-select form-select"
                 >
                   <option value="">Choose Category</option>
                   {categories.map((category) => (
-                    <option key={category._id} value={category.name}>
+                    <option key={category._id} id={category._id} value={category.name}>
                       {category.name}
                     </option>
                   ))}
                 </select>
+              </div>
+
+              {subCategories?.length > 0 && <div className="input-group mb-3">
+                <div className="input-group mb-3">
+                  <select
+                    onChange={(e) => {
+                      const selected_element =
+                        e.target.childNodes[e.target.selectedIndex];
+                      const subCategory_id =
+                        selected_element.getAttribute("id");
+                      setSubCategory(subCategory_id);
+                    }}
+                    className="form-select form-select"
+                  >
+                    <option value={subCategory}>Choose Sub Category</option>
+                    {subCategories.map((subcategory) => (
+                      <option
+                        key={subcategory._id}
+                        id={subcategory._id}
+                        value={subcategory.name}
+                      >
+                        {subcategory.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>}
+
+              <div className="mb-3 form-check">
+                <input
+                  onChange={(e) => setFavourite(e.target.checked)}
+                  type="checkbox"
+                  className="form-check-input"
+                  id="favourite"
+                  checked={favourite}
+                />
+                <label className="form-check-label" htmlFor="favourite">
+                  favourite
+                </label>
+              </div>
+
+              <div className="mb-3 form-check">
+                <input
+                  onChange={(e) => setTrending(e.target.checked)}
+                  type="checkbox"
+                  className="form-check-input"
+                  id="trending"
+                  checked={trending}
+                />
+                <label className="form-check-label" htmlFor="trending">
+                  Trending
+                </label>
               </div>
 
               <div id="createProductFormFile" className="mb-3">

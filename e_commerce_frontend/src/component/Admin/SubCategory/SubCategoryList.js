@@ -87,13 +87,15 @@ const SubCategoryList = () => {
                           </td>
                         </tr>
                       ) : (
-                        subCategories &&
+                        <>
+                        {/* <div>{subCategories.length}</div> */}
+                        {subCategories &&
                         subCategories.map((sub_category, index) => (
                           <tr key={index} className="align-middle">
                             <th scope="row">{index + 1}.</th>
                             <td>{sub_category._id}</td>
                             <td>{sub_category.name}</td>
-                            <td>{sub_category.category.name}</td>
+                            <td>{sub_category.category?.name}</td>
                             <td>
                               <input
                                 onClick={() =>
@@ -117,7 +119,8 @@ const SubCategoryList = () => {
                               />
                             </td>
                           </tr>
-                        ))
+                        ))}
+                        </>
                       )}
                     </tbody>
                   </table>

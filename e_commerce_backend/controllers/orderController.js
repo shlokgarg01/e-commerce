@@ -3,6 +3,7 @@ const Product = require("../models/productModel");
 const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const enums = require("../utils/enums");
+const { sendOrderCreateSMS } = require("../utils/sendNotification");
 
 // Create new order
 exports.newOrder = catchAsyncErrors(async (req, res, next) => {
@@ -39,6 +40,8 @@ exports.newOrder = catchAsyncErrors(async (req, res, next) => {
     paidAt: Date.now(),
     user: req.user._id,
   });
+
+  sendOrderCreateSMS()
 
   res.status(201).json({
     success: true,
@@ -101,7 +104,7 @@ exports.updateOrder = catchAsyncErrors(async (req, res, next) => {
     );
   }
 
-  if (req.body.status === enums.ORDER_STATUS.SHIPPED) {
+  if (req.body.status === enums.ORDER_STATUS.DISPATCHED) {
     order.orderItems.forEach(async (orderItem) => {
       await updateStock(orderItem.product, orderItem.quantity);
     });

@@ -39,3 +39,20 @@ exports.sendSMS = async (options) => {
     .catch((error) => console.log("Error while sending OTP - ", error));
   return null;
 };
+
+exports.sendOrderCreateSMS = async () => {
+  const accountSid = process.env.TWILIO_SID;
+  const authToken = process.env.TWILIO_AUTH_TOKEN;
+  const client = require("twilio")(accountSid, authToken);
+  const contactNumber = process.env.ADMIN_CONTACT
+
+  client.messages
+    .create({
+      body: `New Order received.`,
+      from: process.env.TWILIO_PHONE_NUMBER,
+      to: `+91${contactNumber}`,
+    })
+    .then((message) => console.log("OTP Sent - ", message.sid))
+    .catch((error) => console.log("Error while sending OTP - ", error));
+  return null;
+};

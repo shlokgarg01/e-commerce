@@ -31,7 +31,7 @@ import {
   couponsReducer,
   newCouponReducer,
 } from "./reducers/couponReducer";
-import { newSubCategoryReducer, subCategoriesReducer, subCategoryDetailsReducer, subCategoryReducer } from "./reducers/subCategoryReducer";
+import { newSubCategoryReducer, subCategoriesForCategoryReducer, subCategoriesReducer, subCategoryDetailsReducer, subCategoryReducer } from "./reducers/subCategoryReducer";
 
 const reducer = combineReducers({
   products: productsReducer,
@@ -60,6 +60,7 @@ const reducer = combineReducers({
   newSubCategory: newSubCategoryReducer,
   subCategoryDetails: subCategoryDetailsReducer,
   subCategory: subCategoryReducer,
+  subCategoriesByCategory: subCategoriesForCategoryReducer,
 
   coupons: couponsReducer,
   newCoupon: newCouponReducer,

@@ -127,9 +127,7 @@ exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
 
 // get user details
 exports.getUserDetails = catchAsyncErrors(async (req, res, next) => {
-  console.log("---------------------------------")
   const user = await User.findById(req.user.id);
-  console.log("=========================", user)
 
   res.status(200).json({
     success: true,
@@ -253,7 +251,6 @@ exports.sendOTPForRegistration = catchAsyncErrors(async (req, res, next) => {
 
   const otp = generateOTP();
   sendOTP(otp, contactNumber);
-  console.log(`OTP - ${otp}`);
   let hash = otpHash(otp);
 
   await SignupOTP.create({
@@ -339,7 +336,6 @@ exports.sendOTPForLogin = catchAsyncErrors(async (req, res, next) => {
 
   const otp = generateOTP();
   sendOTP(otp, contactNumber);
-  console.log(`OTP - ${otp}`);
   let hash = otpHash(otp);
 
   await SignupOTP.create({

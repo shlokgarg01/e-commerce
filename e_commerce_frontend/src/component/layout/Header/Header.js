@@ -53,11 +53,11 @@ const Header = () => {
                   Categories
                 </Link>
               </li>
-              {/* <li className="nav-item">
+              <li className="nav-item">
                 <Link className="nav-link" to="/admin/subcategories">
                   Sub-Categories
                 </Link>
-              </li> */}
+              </li>
               <li className="nav-item">
                 <Link className="nav-link" to="/admin/products">
                   Products

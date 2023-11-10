@@ -10,6 +10,9 @@ import {
   NEW_SUB_CATEGORY_FAIL,
   NEW_SUB_CATEGORY_REQUEST,
   NEW_SUB_CATEGORY_SUCCESS,
+  SUB_CATEGORIES_FOR_CATEGORY_FAIL,
+  SUB_CATEGORIES_FOR_CATEGORY_REQUEST,
+  SUB_CATEGORIES_FOR_CATEGORY_SUCCESS,
   SUB_CATEGORY_DETAILS_FAIL,
   SUB_CATEGORY_DETAILS_REQUEST,
   SUB_CATEGORY_DETAILS_SUCCESS,
@@ -109,6 +112,24 @@ export const deleteSubCategory = (subCategoryId) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: DELETE_SUB_CATEGORY_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// get Sub Category by category
+export const getSubCategoryByCategory = (categoryId) => async (dispatch) => {
+  try {
+    dispatch({ type: SUB_CATEGORIES_FOR_CATEGORY_REQUEST });
+    const { data } = await axios.get(`/api/v1/subcategories/${categoryId}`)
+
+    dispatch({
+      type: SUB_CATEGORIES_FOR_CATEGORY_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: SUB_CATEGORIES_FOR_CATEGORY_FAIL,
       payload: error.response.data.message,
     });
   }

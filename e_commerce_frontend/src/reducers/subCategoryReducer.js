@@ -11,6 +11,9 @@ import {
   NEW_SUB_CATEGORY_REQUEST,
   NEW_SUB_CATEGORY_RESET,
   NEW_SUB_CATEGORY_SUCCESS,
+  SUB_CATEGORIES_FOR_CATEGORY_FAIL,
+  SUB_CATEGORIES_FOR_CATEGORY_REQUEST,
+  SUB_CATEGORIES_FOR_CATEGORY_SUCCESS,
   SUB_CATEGORY_DETAILS_FAIL,
   SUB_CATEGORY_DETAILS_REQUEST,
   SUB_CATEGORY_DETAILS_SUCCESS,
@@ -147,6 +150,33 @@ export const subCategoryReducer = (state = { subCategory: {} }, action) => {
       return {
         ...state,
         isUpdated: false,
+      };
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+    default:
+      return state;
+  }
+};
+
+export const subCategoriesForCategoryReducer = (state = { subCategoriesByCategory: [] }, action) => {
+  switch (action.type) {
+    case SUB_CATEGORIES_FOR_CATEGORY_REQUEST:
+      return {
+        loading: true,
+        subCategoriesByCategory: [],
+      };
+    case SUB_CATEGORIES_FOR_CATEGORY_SUCCESS:
+      return {
+        loading: false,
+        subCategories: action.payload.subcategories
+      };
+    case SUB_CATEGORIES_FOR_CATEGORY_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
       };
     case CLEAR_ERRORS:
       return {

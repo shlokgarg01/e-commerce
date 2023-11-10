@@ -1,5 +1,6 @@
 const Product = require("../models/productModel");
-const Category = require("../models/categoryModel")
+const Category = require("../models/categoryModel");
+const SubCategory = require("../models/subCategoryModel");
 const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const ApiFeatures = require("../utils/apiFeatures");
@@ -43,8 +44,8 @@ exports.getAllProducts = catchAsyncErrors(async (req, res) => {
 
   const apiFeature = new ApiFeatures(Product.find(), req.query)
     .search()
-    .filter()
-    // .pagination(resultsPerPage);
+    .filter();
+  // .pagination(resultsPerPage);
   const products = await apiFeature.query;
 
   return res.status(200).json({
@@ -150,7 +151,7 @@ exports.updateProduct = catchAsyncErrors(async (req, res, next) => {
 
 // get product details
 exports.getProductDetails = catchAsyncErrors(async (req, res, next) => {
-  const product = await Product.findById(req.params.id);
+  const product = await Product.findById(req.params.id).populate("subCategory");
 
   if (!product) {
     return next(new ErrorHandler("Product Not Found", 404));
@@ -164,24 +165,34 @@ exports.getProductDetails = catchAsyncErrors(async (req, res, next) => {
 
 // get products of a category
 exports.getCategoryProducts = catchAsyncErrors(async (req, res, next) => {
-  const category = await Category.findById(req.params.id)
-  if(!category) {
+  const category = await Category.findById(req.params.id);
+  if (!category) {
     return next(new ErrorHandler("Category Not Found", 404));
   }
 
-  const products = await Product.find({category: category.name});
+  const products = await Product.find({ category: category.name })
   if (!products) {
     return next(new ErrorHandler("Products Not Found", 404));
   }
-  
-  const subCategoryProducts = await Product.aggregate([
-    { $match: { category: category.name } }, // Filter by desired category
-    { $group: { _id: '$subCategory', products: { $push: '$$ROOT' } } } // Group by subcategory
-  ]).exec()
 
+  let subCategoryProducts = await Product.aggregate([
+    { $match: { category: category.name } }, // Filter by desired category
+    { $group: { _id: "$subCategory", products: { $push: "$$ROOT" } } }, // Group by subcategory
+  ]).exec();
+
+  // change _id to category name in the result
+  subCategoryProducts = subCategoryProducts.map(async ({ _id, products }) => {
+    let subCategory = await SubCategory.findById(_id)
+    return {
+      subCategory: subCategory?.name,
+      products,
+    }
+  });
+
+  const results = await Promise.all(subCategoryProducts)
   res.status(200).json({
     success: true,
-    products: subCategoryProducts,
+    products: results,
   });
 });
 
@@ -304,7 +315,7 @@ exports.deleteReview = catchAsyncErrors(async (req, res, next) => {
 
 // get suggested products
 exports.getSuggestedProducts = catchAsyncErrors(async (req, res) => {
-  const products = await Product.find({}).limit(15)
+  const products = await Product.find({}).limit(15);
 
   return res.status(200).json({
     success: true,

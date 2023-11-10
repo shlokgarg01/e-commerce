@@ -83,7 +83,7 @@ const orderSchema = new mongoose.Schema(
     orderStatus: {
       type: String,
       required: true,
-      default: enums.ORDER_STATUS.PROCESSING,
+      default: enums.ORDER_STATUS.RECEIVED,
     },
     deliveredAt: Date,
   },

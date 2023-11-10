@@ -131,13 +131,13 @@ const ProcessOrder = () => {
                       className="form-select form-select"
                     >
                       <option value="">Choose Status</option>
-                      {order.orderStatus === Enums.ORDER_STATUS.PROCESSING && (
-                        <option value={Enums.ORDER_STATUS.SHIPPED}>
-                          Shipped
+                      {order.orderStatus === Enums.ORDER_STATUS.RECEIVED && (
+                        <option value={Enums.ORDER_STATUS.DISPATCHED}>
+                          Dispatched
                         </option>
                       )}
 
-                      {order.orderStatus === Enums.ORDER_STATUS.SHIPPED && (
+                      {order.orderStatus === Enums.ORDER_STATUS.DISPATCHED && (
                         <option value={Enums.ORDER_STATUS.DELIVERED}>
                           Delivered
                         </option>
@@ -176,6 +176,16 @@ const ProcessOrder = () => {
                         </span>
                       </div>
                     ))}
+                  Total Price -{" "}
+                  <b>
+                    ₹{" "}
+                    {order.orderItems.reduce((sum, currentValue) => {
+                      return sum + currentValue.price * currentValue.quantity;
+                    }, 0)}
+                  </b><br />
+                  Shipping Price - <b>₹ {order.shippingPrice}</b>
+                  <br />
+                  Tax - <b>₹ {order.taxPrice}</b>
                 </div>
               </div>
             </div>

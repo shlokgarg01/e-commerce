@@ -7,14 +7,14 @@ const cloudinary = require("cloudinary");
 exports.createSubCategory = catchAsyncErrors(async (req, res, next) => {
   req.body.user = req.user.id;
 
-  let image = {};
-  const result = await cloudinary.v2.uploader.upload(req.body.image, {
-    folder: "subcategories",
-  });
+  // let image = {};
+  // const result = await cloudinary.v2.uploader.upload(req.body.image, {
+  //   folder: "subcategories",
+  // });
 
-  image.public_id = result.public_id;
-  image.url = result.secure_url;
-  req.body.image = image;
+  // image.public_id = result.public_id;
+  // image.url = result.secure_url;
+  // req.body.image = image;
 
   const subcategory = await SubCategory.create(req.body);
   res.status(200).json({
@@ -52,20 +52,20 @@ exports.updateSubCategory = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHandler("Sub Category Not Found.", 404));
   }
 
-  let image = req.body.image;
-  if (image !== undefined) {
-    await cloudinary.v2.uploader.destroy(subcategory.image.public_id);
+  // let image = req.body.image;
+  // if (image !== undefined) {
+  //   await cloudinary.v2.uploader.destroy(subcategory.image.public_id);
 
-    const imagesLink = {};
-    const result = await cloudinary.v2.uploader.upload(image, {
-      folder: "subcategories",
-    });
+  //   const imagesLink = {};
+  //   const result = await cloudinary.v2.uploader.upload(image, {
+  //     folder: "subcategories",
+  //   });
 
-    imagesLink.public_id = result.public_id;
-    imagesLink.url = result.secure_url;
+  //   imagesLink.public_id = result.public_id;
+  //   imagesLink.url = result.secure_url;
 
-    req.body.image = imagesLink;
-  }
+  //   req.body.image = imagesLink;
+  // }
 
   subcategory = await SubCategory.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
