@@ -130,7 +130,7 @@ export const updateProduct = (id, productData) => async (dispatch) => {
 export const deleteProduct = (id) => async (dispatch) => {
   try {
     dispatch({ type: DELETE_PRODUCT_REQUEST });
-    const { data } = await axios.get(`/api/v1/admin/product/${id}`)
+    const { data } = await axios.delete(`/api/v1/admin/product/${id}`)
 
     dispatch({
       type: DELETE_PRODUCT_SUCCESS,

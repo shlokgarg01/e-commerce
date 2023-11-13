@@ -58,7 +58,7 @@ exports.getAllProducts = catchAsyncErrors(async (req, res) => {
 
 // get all products -- Admin
 exports.getAdminProducts = catchAsyncErrors(async (req, res) => {
-  const products = await Product.find();
+  const products = await Product.find().populate("subCategory");
 
   return res.status(200).json({
     success: true,

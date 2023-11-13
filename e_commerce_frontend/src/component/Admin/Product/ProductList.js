@@ -70,62 +70,60 @@ const ProductList = () => {
                     <thead>
                       <tr>
                         <th scope="col">S.No</th>
-                        <th scope="col">Product Id</th>
+                        {/* <th scope="col">Product Id</th> */}
                         <th scope="col">Name</th>
                         <th scope="col">Stock</th>
                         <th scope="col">Price</th>
                         <th scope="col">Discount</th>
                         <th scope="col">Final Price</th>
-                        <th scope="col">Rating</th>
-                        <th scope="col">Reviews</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">Sub Category</th>
                         <th scope="col">Action</th>
                         <th scope="col">Action</th>
                       </tr>
                     </thead>
                     <tbody>
-                    {products.length === 0 ? (
+                      {products.length === 0 ? (
                         <tr>
-                          <td className="text-center fw-bold" colSpan={11}>No Products Yet</td>
-                        </tr>
-                      ) : products.map((product, index) => (
-                        <tr key={index} className="align-middle">
-                          <th scope="row">{index + 1}.</th>
-                          <td>{product._id}</td>
-                          <td>{product.name}</td>
-                          <td>{product.stock}</td>
-                          <td>{product.price}</td>
-                          <td>{product.discount}</td>
-                          <td>{product.ratings}</td>
-                          <td>{product.finalPrice}</td>
-                          <td
-                            id="productReviewCount"
-                            className="align-middle"
-                            onClick={() =>
-                              navigate(`/admin/reviews/${product._id}`)
-                            }
-                          >
-                            {product.reviews.length}&nbsp;
-                          </td>
-                          <td>
-                            <input
-                              onClick={() =>
-                                navigate(`/admin/product/${product._id}`)
-                              }
-                              value="Edit"
-                              readOnly
-                              className="w-lg-25 btn btn-sm btn-primary"
-                            />
-                          </td>
-                          <td>
-                            <input
-                              onClick={() => deleteProductHandler(product._id)}
-                              value="Delete"
-                              readOnly
-                              className="w-lg-25 btn btn-sm btn-danger"
-                            />
+                          <td className="text-center fw-bold" colSpan={11}>
+                            No Products Yet
                           </td>
                         </tr>
-                      ))}
+                      ) : (
+                        products.map((product, index) => (
+                          <tr key={index} className="align-middle">
+                            <th scope="row">{index + 1}.</th>
+                            {/* <td>{product._id}</td> */}
+                            <td>{product.name}</td>
+                            <td>{product.stock}</td>
+                            <td>{product.price}</td>
+                            <td>{product.discount}</td>
+                            <td>{product.finalPrice}</td>
+                            <td>{product.category}</td>
+                            <td>{product?.subCategory?.name}&nbsp;</td>
+                            <td>
+                              <input
+                                onClick={() =>
+                                  navigate(`/admin/product/${product._id}`)
+                                }
+                                value="Edit"
+                                readOnly
+                                className="w-lg-25 btn btn-sm btn-primary"
+                              />
+                            </td>
+                            <td>
+                              <input
+                                onClick={() =>
+                                  deleteProductHandler(product._id)
+                                }
+                                value="Delete"
+                                readOnly
+                                className="w-lg-25 btn btn-sm btn-danger"
+                              />
+                            </td>
+                          </tr>
+                        ))
+                      )}
                     </tbody>
                   </table>
                 </div>
