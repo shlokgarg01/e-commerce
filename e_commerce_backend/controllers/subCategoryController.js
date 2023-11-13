@@ -101,7 +101,7 @@ exports.deleteSubCategory = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHandler("Sub Category Not Found", 404));
   }
 
-  await cloudinary.v2.uploader.destroy(subcategory.image.public_id);
+  // await cloudinary.v2.uploader.destroy(subcategory.image.public_id);
 
   await subcategory.deleteOne();
   res.status(200).json({

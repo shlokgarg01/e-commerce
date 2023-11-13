@@ -75,7 +75,7 @@ const OrderList = () => {
                           <td className="text-center fw-bold" colSpan={8}>No Orders Yet</td>
                         </tr>
                       ) : (
-                        orders && orders.map((order, index) => (
+                        orders && orders.reverse().map((order, index) => (
                           <tr key={index} className="align-middle">
                             <th scope="row">{index + 1}.</th>
                             <td>{order._id}</td>

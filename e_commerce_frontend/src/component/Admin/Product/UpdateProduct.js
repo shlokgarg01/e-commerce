@@ -53,7 +53,7 @@ const UpdateProduct = () => {
       setDiscount(product.discount);
       setStock(product.stock);
       setCategory(product.category);
-      setSubCategory(product.subCategory.name);
+      setSubCategory(product.subCategory?.name);
       setTrending(product.trending);
       setFavourite(product.favourite);
       setOldImages(product.images);

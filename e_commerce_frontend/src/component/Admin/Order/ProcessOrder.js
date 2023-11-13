@@ -179,7 +179,7 @@ const ProcessOrder = () => {
                   Total Price -{" "}
                   <b>
                     ₹{" "}
-                    {order.orderItems.reduce((sum, currentValue) => {
+                    {order.orderItems?.reduce((sum, currentValue) => {
                       return sum + currentValue.price * currentValue.quantity;
                     }, 0)}
                   </b><br />
