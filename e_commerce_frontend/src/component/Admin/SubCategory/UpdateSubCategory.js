@@ -19,9 +19,9 @@ const UpdateSubCategory = () => {
 
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
-  const [oldImages, setOldImages] = useState([]);
-  const [images, setImages] = useState([]);
-  const [imagePreview, setImagesPreview] = useState([]);
+  // const [oldImages, setOldImages] = useState([]);
+  // const [images, setImages] = useState([]);
+  // const [imagePreview, setImagesPreview] = useState([]);
 
   const {
     loading,
@@ -40,7 +40,7 @@ const UpdateSubCategory = () => {
     } else {
       setName(subCategory.name);
       setCategory(subCategory.category._id);
-      setOldImages([subCategory.image]);
+      // setOldImages([subCategory.image]);
     }
 
     if (error) {
@@ -77,30 +77,30 @@ const UpdateSubCategory = () => {
     myForm.set("name", name);
     myForm.set("category", category);
 
-    images.forEach((image) => {
-      myForm.append("image", image);
-    });
+    // images.forEach((image) => {
+    //   myForm.append("image", image);
+    // });
     dispatch(updateSubCategory(subCategoryId, myForm));
   };
 
-  const updateSubCategoryImageHandler = (e) => {
-    const files = Array.from(e.target.files);
+  // const updateSubCategoryImageHandler = (e) => {
+  //   const files = Array.from(e.target.files);
 
-    setImages([]);
-    setImagesPreview([]);
-    setOldImages([]);
+  //   setImages([]);
+  //   setImagesPreview([]);
+  //   setOldImages([]);
 
-    files.forEach((file) => {
-      const reader = new FileReader();
-      reader.onload = () => {
-        if (reader.readyState === 2) {
-          setImagesPreview((old) => [...old, reader.result]);
-          setImages((old) => [...old, reader.result]);
-        }
-      };
-      reader.readAsDataURL(file);
-    });
-  };
+  //   files.forEach((file) => {
+  //     const reader = new FileReader();
+  //     reader.onload = () => {
+  //       if (reader.readyState === 2) {
+  //         setImagesPreview((old) => [...old, reader.result]);
+  //         setImages((old) => [...old, reader.result]);
+  //       }
+  //     };
+  //     reader.readAsDataURL(file);
+  //   });
+  // };
 
   return (
     <Fragment>
@@ -146,7 +146,7 @@ const UpdateSubCategory = () => {
                   ))}
                 </select>
               </div>
-              <div className="mb-3">
+              {/* <div className="mb-3">
                 <label className="form-label">Sub Category Image</label>
                 <input
                   type="file"
@@ -155,9 +155,9 @@ const UpdateSubCategory = () => {
                   accept="image/*"
                   onChange={updateSubCategoryImageHandler}
                 />
-              </div>
+              </div> */}
 
-              <div className="input-group mb-3 d-flex flex-row text-center">
+              {/* <div className="input-group mb-3 d-flex flex-row text-center">
                 {oldImages &&
                   oldImages.map((image, index) => (
                     <img
@@ -167,9 +167,9 @@ const UpdateSubCategory = () => {
                       alt="Current Category"
                     />
                   ))}
-              </div>
+              </div> */}
 
-              <div className="input-group mb-3 d-flex flex-row text-center">
+              {/* <div className="input-group mb-3 d-flex flex-row text-center">
                 {imagePreview.map((image, index) => (
                   <img
                     style={{ height: 100, width: 100, marginRight: 16 }}
@@ -178,7 +178,7 @@ const UpdateSubCategory = () => {
                     alt="Category"
                   />
                 ))}
-              </div>
+              </div> */}
 
               <input
                 disabled={loading ? true : false}
