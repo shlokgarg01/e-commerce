@@ -20,7 +20,7 @@
 - ``pm2 start app.js (this should be the starting file of the backend)``
 - ``<comment>: server should be up now. To check, go to IP_address:PORT in the browser``
 - ``<comment>: if it still does not work, proceed further``
-- ``sudo iptables -L <comment>: PORT isnot present in this list``
+- ``sudo iptables -L <comment>: PORT will not present in this list``
 - ``sudo iptables -A INPUT -p tcp --dport <PORT> -j ACCEPT <comment>: to add PORT in the above table``
 - ``sudo apt install netfilter-persistent <comment>: used to persist the changes of the above table``
 - ``sudo iptables -L <comment>: to verify that the changes are still present``

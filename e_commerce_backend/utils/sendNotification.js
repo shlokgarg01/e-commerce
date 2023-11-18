@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+const axios = require('axios')
 
 exports.sendEmail = async (options) => {
   const transporter = nodemailer.createTransport({
@@ -28,15 +29,27 @@ exports.sendSMS = async (options) => {
   const accountSid = process.env.TWILIO_SID;
   const authToken = process.env.TWILIO_AUTH_TOKEN;
   const client = require("twilio")(accountSid, authToken);
+  console.log(options)
 
-  client.messages
-    .create({
-      body: `Your OTP for Parchun King authentication is ${options.otp}`,
-      from: process.env.TWILIO_PHONE_NUMBER,
-      to: `+91${options.contactNumber}`,
-    })
-    .then((message) => console.log("OTP Sent - ", message.sid))
-    .catch((error) => console.log("Error while sending OTP - ", error));
+  // var url = 'https://api.textlocal.in/send/?apikey=MzY2Zjc0NGQzODY5Mzk1NTUxNjg3OTQ5NzIzMDdhNWE&numbers=918307747802&sender=TXTLCL&message=' + encodeURIComponent('OTP to login to parchun king ---- is 123456');
+  // axios
+  //   .get(url)
+  //   .then(function (response) {
+  //     console.log('Message sent -', response.data);
+  //   })
+  //   .catch(function (error) {
+  //     console.log('Message not sent - ', error);
+  //   });
+
+
+  // client.messages
+  //   .create({
+  //     body: `Your OTP for Parchun King authentication is ${options.otp}`,
+  //     from: process.env.TWILIO_PHONE_NUMBER,
+  //     to: `+91${options.contactNumber}`,
+  //   })
+  //   .then((message) => console.log("OTP Sent - ", message.sid))
+  //   .catch((error) => console.log("Error while sending OTP - ", error));
   return null;
 };
 
@@ -46,13 +59,13 @@ exports.sendOrderCreateSMS = async () => {
   const client = require("twilio")(accountSid, authToken);
   const contactNumber = process.env.ADMIN_CONTACT
 
-  client.messages
-    .create({
-      body: `New Order received.`,
-      from: process.env.TWILIO_PHONE_NUMBER,
-      to: `+91${contactNumber}`,
-    })
-    .then((message) => console.log("OTP Sent - ", message.sid))
-    .catch((error) => console.log("Error while sending OTP - ", error));
+  // client.messages
+  //   .create({
+  //     body: `New Order received.`,
+  //     from: process.env.TWILIO_PHONE_NUMBER,
+  //     to: `+91${contactNumber}`,
+  //   })
+  //   .then((message) => console.log("OTP Sent - ", message.sid))
+  //   .catch((error) => console.log("Error while sending OTP - ", error));
   return null;
 };
