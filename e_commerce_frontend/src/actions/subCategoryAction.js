@@ -1,4 +1,3 @@
-import axios from "axios";
 import {
   CLEAR_ERRORS,
   DELETE_SUB_CATEGORY_FAIL,
@@ -20,6 +19,7 @@ import {
   UPDATE_SUB_CATEGORY_REQUEST,
   UPDATE_SUB_CATEGORY_SUCCESS,
 } from "../constants/subCategoryConstants";
+import axiosInstance from "../utils/Config";
 
 // Get All Sub Categories
 export const getAllSubCategories = () => async (dispatch) => {
@@ -27,7 +27,7 @@ export const getAllSubCategories = () => async (dispatch) => {
     dispatch({
       type: GET_SUB_CATEGORIES_REQUEST,
     });
-    const { data } = await axios.get("/api/v1/admin/subcategories")
+    const { data } = await axiosInstance.get("/api/v1/admin/subcategories")
 
     dispatch({
       type: GET_SUB_CATEGORIES_SUCCESS,
@@ -47,7 +47,7 @@ export const getSubCategoryDetails = (id) => async (dispatch) => {
     dispatch({
       type: SUB_CATEGORY_DETAILS_REQUEST,
     });
-    const { data } = await axios.get(`/api/v1/admin/subcategory/${id}`)
+    const { data } = await axiosInstance.get(`/api/v1/admin/subcategory/${id}`)
     dispatch({
       type: SUB_CATEGORY_DETAILS_SUCCESS,
       payload: data.subcategory,
@@ -65,7 +65,7 @@ export const createSubCategory = (subCategoryData) => async (dispatch) => {
   try {
     dispatch({ type: NEW_SUB_CATEGORY_REQUEST });
     const config = { "Content-Type": "application/json" };
-    const { data } = await axios.post("/api/v1/admin/subcategory/new", subCategoryData, config)
+    const { data } = await axiosInstance.post("/api/v1/admin/subcategory/new", subCategoryData, config)
 
     dispatch({
       type: NEW_SUB_CATEGORY_SUCCESS,
@@ -85,7 +85,7 @@ export const updateSubCategory =
     try {
       dispatch({ type: UPDATE_SUB_CATEGORY_REQUEST });
       const config = { "Content-Type": "application/json" };
-      const { data } = await axios.put(`/api/v1/admin/subcategory/${subCategoryId}`, subCategoryData, config)
+      const { data } = await axiosInstance.put(`/api/v1/admin/subcategory/${subCategoryId}`, subCategoryData, config)
 
       dispatch({
         type: UPDATE_SUB_CATEGORY_SUCCESS,
@@ -103,7 +103,7 @@ export const updateSubCategory =
 export const deleteSubCategory = (subCategoryId) => async (dispatch) => {
   try {
     dispatch({ type: DELETE_SUB_CATEGORY_REQUEST });
-    const { data } = await axios.delete(`/api/v1/admin/subcategory/${subCategoryId}`)
+    const { data } = await axiosInstance.delete(`/api/v1/admin/subcategory/${subCategoryId}`)
 
     dispatch({
       type: DELETE_SUB_CATEGORY_SUCCESS,
@@ -121,7 +121,7 @@ export const deleteSubCategory = (subCategoryId) => async (dispatch) => {
 export const getSubCategoryByCategory = (categoryId) => async (dispatch) => {
   try {
     dispatch({ type: SUB_CATEGORIES_FOR_CATEGORY_REQUEST });
-    const { data } = await axios.get(`/api/v1/subcategories/${categoryId}`)
+    const { data } = await axiosInstance.get(`/api/v1/subcategories/${categoryId}`)
 
     dispatch({
       type: SUB_CATEGORIES_FOR_CATEGORY_SUCCESS,

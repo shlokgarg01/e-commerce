@@ -1,4 +1,3 @@
-import axios from "axios";
 import {
   CLEAR_ERRORS,
   COUPON_DETAILS_FAIL,
@@ -17,6 +16,7 @@ import {
   UPDATE_COUPON_REQUEST,
   UPDATE_COUPON_SUCCESS,
 } from "../constants/couponConstants";
+import axiosInstance from "../utils/Config";
 
 // Get All Coupons
 export const getAllCoupons = () => async (dispatch) => {
@@ -24,7 +24,7 @@ export const getAllCoupons = () => async (dispatch) => {
     dispatch({
       type: GET_COUPONS_REQUEST,
     });
-    const { data } = await axios.get("/api/v1/admin/coupons")
+    const { data } = await axiosInstance.get("/api/v1/admin/coupons")
 
     dispatch({
       type: GET_COUPONS_SUCCESS,
@@ -44,7 +44,7 @@ export const getCouponDetails = (couponId) => async (dispatch) => {
     dispatch({
       type: COUPON_DETAILS_REQUEST,
     });
-    const { data } = await axios.get(`/api/v1/admin/coupon/${couponId}`)
+    const { data } = await axiosInstance.get(`/api/v1/admin/coupon/${couponId}`)
 
     dispatch({
       type: COUPON_DETAILS_SUCCESS,
@@ -63,7 +63,7 @@ export const createCoupon = (couponData) => async (dispatch) => {
   try {
     dispatch({ type: NEW_COUPON_REQUEST });
     const config = { "Content-Type": "application/json" };
-    const { data } = await axios.post("/api/v1/admin/coupon/new", couponData, config)
+    const { data } = await axiosInstance.post("/api/v1/admin/coupon/new", couponData, config)
 
     dispatch({
       type: NEW_COUPON_SUCCESS,
@@ -82,7 +82,7 @@ export const updateCoupon = (couponId, couponData) => async (dispatch) => {
   try {
     dispatch({ type: UPDATE_COUPON_REQUEST });
     const config = { "Content-Type": "application/json" };
-    const { data } = await axios.put(`/api/v1/admin/coupon/${couponId}`, couponData, config)
+    const { data } = await axiosInstance.put(`/api/v1/admin/coupon/${couponId}`, couponData, config)
 
     dispatch({
       type: UPDATE_COUPON_SUCCESS,
@@ -100,7 +100,7 @@ export const updateCoupon = (couponId, couponData) => async (dispatch) => {
 export const deleteCoupon = (couponId) => async (dispatch) => {
   try {
     dispatch({ type: DELETE_COUPON_REQUEST });
-    const { data } = await axios.delete(`/api/v1/admin/coupon/${couponId}`)
+    const { data } = await axiosInstance.delete(`/api/v1/admin/coupon/${couponId}`)
 
     dispatch({
       type: DELETE_COUPON_SUCCESS,

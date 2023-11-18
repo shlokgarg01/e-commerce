@@ -1,5 +1,9 @@
 const mongoose = require("mongoose");
 
+// When we create a product without a subcategory, then we get an error that cannot parse "" as ObjectId. This is to bypass that error
+const castObjectId = mongoose.ObjectId.cast();
+mongoose.ObjectId.cast(v => v === '' ? v : castObjectId(v));
+ 
 const productSchema = new mongoose.Schema(
   {
     name: {
@@ -56,7 +60,7 @@ const productSchema = new mongoose.Schema(
     subCategory: {
       type: mongoose.Schema.ObjectId,
       ref: "SubCategory",
-      requred: [true, "Please enter valid product sub category"],
+      default: ''
     },
     stock: {
       type: Number,

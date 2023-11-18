@@ -8,7 +8,7 @@ exports.createCategory = catchAsyncErrors(async (req, res, next) => {
   req.body.user = req.user.id;
 
   let image = {};
-  const result = await cloudinary.v2.uploader.upload(req.body.image, {
+  const result = await cloudinary.v2.uploader.upload_large(req.body.image, {
     folder: "categories",
   });
 
@@ -47,7 +47,7 @@ exports.updateCategory = catchAsyncErrors(async (req, res, next) => {
     await cloudinary.v2.uploader.destroy(category.image.public_id);
 
     const imagesLink = {};
-    const result = await cloudinary.v2.uploader.upload(image, {
+    const result = await cloudinary.v2.uploader.upload_large(image, {
       folder: "categories",
     });
 

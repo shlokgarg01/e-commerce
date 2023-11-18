@@ -17,13 +17,13 @@ exports.createProduct = catchAsyncErrors(async (req, res, next) => {
 
   const imagesLink = [];
   for (let i = 0; i < images.length; ++i) {
-    const result = await cloudinary.v2.uploader.upload(images[i], {
+    const result = await cloudinary.v2.uploader.upload_large(images[i], {
       folder: "products",
     });
 
     imagesLink.push({
-      public_id: result.public_id,
-      url: result.secure_url,
+      public_id: result?.public_id,
+      url: result?.secure_url,
     });
   }
 
@@ -107,7 +107,7 @@ exports.updateProduct = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHandler("Product Not Found", 404));
   }
 
-  // Deleting existing images from cloudinary &adding new images (if any)
+  // Deleting existing images from cloudinary & adding new images (if any)
   let images = [];
   if (typeof req.body.images === "string") {
     images.push(req.body.images);
@@ -124,7 +124,7 @@ exports.updateProduct = catchAsyncErrors(async (req, res, next) => {
     // Uploading new images
     const imagesLink = [];
     for (let i = 0; i < images.length; ++i) {
-      const result = await cloudinary.v2.uploader.upload(images[i], {
+      const result = await cloudinary.v2.uploader.upload_large(images[i], {
         folder: "products",
       });
 
@@ -185,6 +185,7 @@ exports.getCategoryProducts = catchAsyncErrors(async (req, res, next) => {
     let subCategory = await SubCategory.findById(_id)
     return {
       subCategory: subCategory?.name,
+      subCategoryImage: subCategory?.image,
       products,
     }
   });

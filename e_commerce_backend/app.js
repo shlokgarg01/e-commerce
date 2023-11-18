@@ -10,17 +10,13 @@ const app = express();
 app.use(morgan("combined"));
 
 // Was getting - (Entity too large) error while uploading heavy images from Frontend. Below 2 lines are the fix for that. Sequence of lines matter, so in future keep the sequence same if needed.
-app.use(bodyParser.json({ limit: '10mb' }));
-app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
+app.use(bodyParser.json({ limit: "10mb" }));
+app.use(bodyParser.urlencoded({ extended: true, limit: "10mb" }));
 
 app.use(express.json());
 app.use(cookieParser());
 app.use(fileUpload());
-app.use(
-  cors({
-    credentials: true,
-  })
-);
+app.use(cors());
 
 const errorMiddleware = require("./middleware/error");
 
@@ -41,7 +37,7 @@ app.use("/api/v1", addressRoutes);
 app.use("/api/v1", couponRoutes);
 app.use("/api/v1", subCategoryRoutes);
 
-app.get("/api/v1/testing", (req, res) => {
+app.get("/ping", (req, res) => {
   res.status(200).json({
     message:"Server is running."
   })

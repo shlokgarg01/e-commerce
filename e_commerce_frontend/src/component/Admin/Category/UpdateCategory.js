@@ -59,12 +59,9 @@ const UpdateCategory = () => {
   const submitForm = (e) => {
     e.preventDefault();
 
-    const myForm = new FormData();
-    myForm.set("name", name);
-
-    images.forEach((image) => {
-      myForm.append("image", image);
-    });
+    const myForm= {
+      name, image: images[0]
+    }
     dispatch(updateCategory(categoryId, myForm));
   };
 

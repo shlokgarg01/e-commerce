@@ -1,10 +1,10 @@
 # TODO
-- [ ] Sub categories
 - [ ] Number of Coupons which can be used. Like coupon x could be used 10 times
-- [ ] Add ping route
 
 
 # DONE
+- [x] Add ping route
+- [x] Sub categories
 - [x] change all - status(500) to some other status code
 - [x] category creation APIs
 - [x] Add contactNumber in user model & add it to the registration route

@@ -53,7 +53,7 @@ const UpdateProduct = () => {
       setDiscount(product.discount);
       setStock(product.stock);
       setCategory(product.category);
-      setSubCategory(product.subCategory?.name);
+      setSubCategory(product.subCategory?._id);
       setTrending(product.trending);
       setFavourite(product.favourite);
       setOldImages(product.images);
@@ -89,19 +89,20 @@ const UpdateProduct = () => {
   const submitForm = (e) => {
     e.preventDefault();
 
-    const myForm = new FormData();
-    myForm.set("name", name);
-    myForm.set("price", price);
-    myForm.set("discount", discount);
-    myForm.set("description", description);
-    myForm.set("stock", stock);
-    myForm.set("category", category);
-    myForm.set("subCategory", subCategory);
-    myForm.set("trending", trending);
-    myForm.set("favourite", favourite);
-
+    const myForm = {
+      name,
+      price,
+      discount,
+      description,
+      stock,
+      category,
+      subCategory,
+      trending,
+      favourite,
+      images: [],
+    };
     images.forEach((image) => {
-      myForm.append("images", image);
+      myForm.images.push(image);
     });
     dispatch(updateProduct(productId, myForm));
   };
@@ -126,8 +127,8 @@ const UpdateProduct = () => {
   };
 
   const fetchSubCategories = async (category_id) => {
-    dispatch(getSubCategoryByCategory(category_id))
-  }
+    dispatch(getSubCategoryByCategory(category_id));
+  };
 
   return (
     <Fragment>
@@ -216,47 +217,57 @@ const UpdateProduct = () => {
                 <select
                   value={category}
                   onChange={(e) => {
-                    const selected_element = e.target.childNodes[e.target.selectedIndex]
-                    const category_id =  selected_element.getAttribute('id');
-                    setCategory(e.target.value)
-                    fetchSubCategories(category_id)
+                    const selected_element =
+                      e.target.childNodes[e.target.selectedIndex];
+                    const category_id = selected_element.getAttribute("id");
+                    setCategory(e.target.value);
+                    fetchSubCategories(category_id);
                   }}
                   className="form-select form-select"
                 >
                   <option value="">Choose Category</option>
                   {categories.map((category) => (
-                    <option key={category._id} id={category._id} value={category.name}>
+                    <option
+                      key={category._id}
+                      id={category._id}
+                      value={category.name}
+                    >
                       {category.name}
                     </option>
                   ))}
                 </select>
               </div>
 
-              {subCategories?.length > 0 && <div className="input-group mb-3">
+              {subCategories?.length > 0 && (
                 <div className="input-group mb-3">
-                  <select
-                    onChange={(e) => {
-                      const selected_element =
-                        e.target.childNodes[e.target.selectedIndex];
-                      const subCategory_id =
-                        selected_element.getAttribute("id");
-                      setSubCategory(subCategory_id);
-                    }}
-                    className="form-select form-select"
-                  >
-                    <option value={subCategory}>Choose Sub Category</option>
-                    {subCategories.map((subcategory) => (
-                      <option
-                        key={subcategory._id}
-                        id={subcategory._id}
-                        value={subcategory.name}
-                      >
-                        {subcategory.name}
+                  <div className="input-group mb-3">
+                    <select
+                      onChange={(e) => {
+                        const selected_element =
+                          e.target.childNodes[e.target.selectedIndex];
+                        const subCategory_id =
+                          selected_element.getAttribute("id");
+                        setSubCategory(subCategory_id);
+                      }}
+                      className="form-select form-select"
+                    >
+                      <option key="" id="" value="">
+                        Choose Sub Category
                       </option>
-                    ))}
-                  </select>
+                      {subCategories.map((subcategory) => (
+                        <option
+                          key={subcategory._id}
+                          id={subcategory._id}
+                          value={subcategory.name}
+                          selected={subcategory._id === subCategory}
+                        >
+                          {subcategory.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
-              </div>}
+              )}
 
               <div className="mb-3 form-check">
                 <input

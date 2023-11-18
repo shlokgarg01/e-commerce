@@ -1,7 +1,6 @@
 # TODO
-- [ ] isFavourie & isTrending check while creation & updation of product
 - [ ] After update of product, if I go back to product page, image is not updated as state of productDetails is not updated. Same is happening with coupons, expiry is not updating without refresh
-- [ ] After sending OTP for Login, if I go back, then it's not working properly
+- [ ] After sending OTP for Login, if I go back, then it's not working properly (verify first)
 
 
 # TODO:MAYBE
@@ -9,10 +8,11 @@
 - [ ] Add a footer
 - [ ] Add confirmation pop while deleting
 - [ ] Truncate long review in reviews page
-- [ ] Add Colors in colors file
 
 
 # DONE
+- [x] isFavourie & isTrending check while creation & updation of product
+- [x] Add Colors in colors file
 - [x] Redirection after login
 - [x] Change status color everywhere on order.
 - [x] Improve the UI

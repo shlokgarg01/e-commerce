@@ -328,7 +328,7 @@ exports.sendOTPForLogin = catchAsyncErrors(async (req, res, next) => {
   if (!user) {
     return next(
       new ErrorHandler(
-        "User with this Contact Number does not exist. Please Reigster.",
+        "User with this Contact Number does not exist. Please Register.",
         400
       )
     );

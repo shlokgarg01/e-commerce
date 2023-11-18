@@ -47,19 +47,11 @@ const NewProduct = () => {
   const submitForm = (e) => {
     e.preventDefault();
 
-    const myForm = new FormData();
-    myForm.set("name", name);
-    myForm.set("price", price);
-    myForm.set("discount", discount);
-    myForm.set("description", description);
-    myForm.set("stock", stock);
-    myForm.set("category", category);
-    myForm.set("subCategory", subCategory)
-    myForm.set("trending", trending);
-    myForm.set("favourite", favourite);
-
+    const myForm= {
+      name, price, discount, description, stock, category, subCategory, trending, favourite, images: []
+    }
     images.forEach((image) => {
-      myForm.append("images", image);
+      myForm.images.push(image);
     });
     dispatch(createProduct(myForm));
   };

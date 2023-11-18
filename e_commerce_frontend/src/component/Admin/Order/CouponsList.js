@@ -78,7 +78,7 @@ const CouponsList = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {coupons.length === 0 ? (
+                      {coupons && coupons.length === 0 ? (
                         <tr>
                           <td className="text-center fw-bold" colSpan={8}>
                             No Coupons Yet
