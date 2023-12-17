@@ -17,7 +17,7 @@
 - ``npm i``
 - ``npm i -g pm2``
 - ``use filezilla to upload env file (if needed)``
-- ``pm2 start app.js (this should be the starting file of the backend)``
+- ``pm2 start server.js (this should be the starting file of the backend)``
 - ``<comment>: server should be up now. To check, go to IP_address:PORT in the browser``
 - ``<comment>: if it still does not work, proceed further``
 - ``sudo iptables -L <comment>: PORT isnot present in this list``
