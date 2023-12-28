@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+const axios = require('axios')
 
 exports.sendEmail = async (options) => {
   const transporter = nodemailer.createTransport({
@@ -25,34 +26,18 @@ exports.sendEmail = async (options) => {
 };
 
 exports.sendSMS = async (options) => {
-  const accountSid = process.env.TWILIO_SID;
-  const authToken = process.env.TWILIO_AUTH_TOKEN;
-  const client = require("twilio")(accountSid, authToken);
+  const config = process.env;
+  let url = `http://sms.messageindia.in/v2/sendSMS?username=${config.SMS_USERNAME}&message=Your OTP For Authentication On The PARCHUN KING App Is ${options.otp} PRCUNK&sendername=${config.OTP_SMS_SENDERNAME}&smstype=${config.SMS_SMSTYPE}&numbers=${options.contactNumber}&apikey=${config.SMS_APIKEY}`;
 
-  client.messages
-    .create({
-      body: `Your OTP for Parchun King authentication is ${options.otp}`,
-      from: process.env.TWILIO_PHONE_NUMBER,
-      to: `+91${options.contactNumber}`,
-    })
-    .then((message) => console.log("OTP Sent - ", message.sid))
-    .catch((error) => console.log("Error while sending OTP - ", error));
+  await axios.get(url)
   return null;
 };
 
 exports.sendOrderCreateSMS = async () => {
-  const accountSid = process.env.TWILIO_SID;
-  const authToken = process.env.TWILIO_AUTH_TOKEN;
-  const client = require("twilio")(accountSid, authToken);
-  const contactNumber = process.env.ADMIN_CONTACT
-
-  client.messages
-    .create({
-      body: `New Order received.`,
-      from: process.env.TWILIO_PHONE_NUMBER,
-      to: `+91${contactNumber}`,
-    })
-    .then((message) => console.log("OTP Sent - ", message.sid))
-    .catch((error) => console.log("Error while sending OTP - ", error));
+  const config = process.env;
+  let url = `http://sms.messageindia.in/v2/sendSMS?username=${config.SMS_USERNAME}&message=New Order Received Successfully PRCUNK&sendername=${config.ORDER_SMS_SENDERNAME}&smstype=${config.SMS_SMSTYPE}&numbers=${config.ADMIN_CONTACT}&apikey=${config.SMS_APIKEY}`
+  console.log("ADMIN CONTACT BEFORE", url)
+  const x = await axios.get(url)
+  console.log("----------------------------------------------", x)
   return null;
 };

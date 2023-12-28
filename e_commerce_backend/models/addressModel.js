@@ -10,6 +10,10 @@ const addressSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    landmark: {
+      type: "String",
+      default: ""
+    },
     city: {
       type: String,
       required: true,

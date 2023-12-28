@@ -114,6 +114,9 @@ exports.updateOrder = catchAsyncErrors(async (req, res, next) => {
 
   if (req.body.status === enums.ORDER_STATUS.DELIVERED) {
     order.deliveredAt = Date.now();
+    if (order.paymentInfo.status === enums.PAYMENT_STATUS.FAILED) {
+      order.paymentInfo.status = enums.PAYMENT_STATUS.SUCCEEDED
+    }
   }
 
   await order.save({ validateBeforeSave: false });

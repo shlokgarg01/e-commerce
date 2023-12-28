@@ -13,4 +13,8 @@ module.exports = {
     DELIVERED: "DELIVERED",
     CANCELLED: "CANCELLED",
   },
+  PAYMENT_STATUS: {
+    SUCCEEDED: "succeeded",
+    FAILED: "failed"
+  }
 };
