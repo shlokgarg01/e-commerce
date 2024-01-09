@@ -39,7 +39,7 @@ const orderSchema = new mongoose.Schema(
       required: true,
     },
     paymentInfo: {
-      id: {
+      transactionId: {
         type: String,
         required: true,
       },
@@ -47,6 +47,11 @@ const orderSchema = new mongoose.Schema(
         type: String,
         required: true,
       },
+      paymentInstrument: {
+        type: Object,
+        required: false,
+        default: {}
+      }
     },
     paidAt: {
       type: Date,
@@ -83,7 +88,7 @@ const orderSchema = new mongoose.Schema(
     orderStatus: {
       type: String,
       required: true,
-      default: enums.ORDER_STATUS.RECEIVED,
+      default: enums.ORDER_STATUS.PLACED,
     },
     deliveredAt: Date,
   },

@@ -8,6 +8,7 @@ module.exports = {
     FLAT_VALUE: "FLAT_VALUE",
   },
   ORDER_STATUS: {
+    PLACED: "PLACED",
     RECEIVED: "RECEIVED",
     DISPATCHED: "DISPATCHED",
     DELIVERED: "DELIVERED",
