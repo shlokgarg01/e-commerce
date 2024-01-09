@@ -36,8 +36,6 @@ exports.sendSMS = async (options) => {
 exports.sendOrderCreateSMS = async () => {
   const config = process.env;
   let url = `http://sms.messageindia.in/v2/sendSMS?username=${config.SMS_USERNAME}&message=New Order Received Successfully PRCUNK&sendername=${config.ORDER_SMS_SENDERNAME}&smstype=${config.SMS_SMSTYPE}&numbers=${config.ADMIN_CONTACT}&apikey=${config.SMS_APIKEY}`
-  console.log("ADMIN CONTACT BEFORE", url)
   const x = await axios.get(url)
-  console.log("----------------------------------------------", x)
   return null;
 };
