@@ -32,3 +32,6 @@
 - ``pm2 flush``
 - ``pm2 logs``
 - ``pm2 restart``
+
+### Errors Faced
+- On checking logs using ``pm2 logs`` ifyou get this error `` session: options?.session ``, then upgrade nodejs to latest version using these 2 commands `` sudo npm install -g n`` `` sudo n stable `` and restart the server (ref - https://www.hostingadvice.com/how-to/update-node-js-latest-version/)
