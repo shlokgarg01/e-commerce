@@ -150,7 +150,6 @@ exports.deleteOrder = catchAsyncErrors(async (req, res, next) => {
 
 // Check Payment Status
 exports.checkPaymentStatus = catchAsyncErrors(async (req, res, next) => {
-  console.log("--------------------------------------------------------------")
   const merchantTransactionId = req.params.txnId;
   const merchantId = process.env.PHONEPE_MERCHENT_ID;
   const keyIndex = process.env.PHONEPE_KEY_INDEX;
@@ -159,6 +158,9 @@ exports.checkPaymentStatus = catchAsyncErrors(async (req, res, next) => {
     process.env.PHONEPE_SALT_KEY;
   const sha256 = crypto.createHash("sha256").update(string).digest("hex");
   const checksum = sha256 + "###" + keyIndex;
+
+  // prod url - https://api.phonepe.com/apis/hermes/pg/v1/status/${merchantId}/${merchantTransactionId}
+  // stag url - https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/status/${merchantId}/${merchantTransactionId}
   const options = {
     method: "GET",
     url: `https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/status/${merchantId}/${merchantTransactionId}`,

@@ -74,7 +74,6 @@ const Header = () => {
             {loading !== true && user && (
               <li className="nav-item dropdown">
                 <div
-                
                   className="nav-link dropdown-toggle"
                   role="button"
                   data-bs-toggle="dropdown"

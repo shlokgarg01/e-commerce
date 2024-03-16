@@ -108,33 +108,37 @@ exports.updateProduct = catchAsyncErrors(async (req, res, next) => {
   }
 
   // Deleting existing images from cloudinary & adding new images (if any)
-  let images = [];
-  if (typeof req.body.images === "string") {
-    images.push(req.body.images);
+  if (req.body.images.length > 0) {
+    let images = [];
+    if (typeof req.body.images === "string") {
+      images.push(req.body.images);
+    } else {
+      images = req.body.images;
+    }
+
+    if (images !== undefined) {
+      // delete images from Cloudinary
+      for (let i = 0; i < product.images.length; ++i) {
+        await cloudinary.v2.uploader.destroy(product.images[i].public_id);
+      }
+
+      // Uploading new images
+      const imagesLink = [];
+      for (let i = 0; i < images.length; ++i) {
+        const result = await cloudinary.v2.uploader.upload_large(images[i], {
+          folder: "products",
+        });
+
+        imagesLink.push({
+          public_id: result.public_id,
+          url: result.secure_url,
+        });
+      }
+
+      req.body.images = imagesLink;
+    }
   } else {
-    images = req.body.images;
-  }
-
-  if (images !== undefined) {
-    // delete images from Cloudinary
-    for (let i = 0; i < product.images.length; ++i) {
-      await cloudinary.v2.uploader.destroy(product.images[i].public_id);
-    }
-
-    // Uploading new images
-    const imagesLink = [];
-    for (let i = 0; i < images.length; ++i) {
-      const result = await cloudinary.v2.uploader.upload_large(images[i], {
-        folder: "products",
-      });
-
-      imagesLink.push({
-        public_id: result.public_id,
-        url: result.secure_url,
-      });
-    }
-
-    req.body.images = imagesLink;
+    req.body.images = product.images
   }
 
   product = await Product.findOneAndUpdate({ _id: req.params.id }, req.body, {
@@ -170,7 +174,7 @@ exports.getCategoryProducts = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHandler("Category Not Found", 404));
   }
 
-  const products = await Product.find({ category: category.name })
+  const products = await Product.find({ category: category.name });
   if (!products) {
     return next(new ErrorHandler("Products Not Found", 404));
   }
@@ -182,15 +186,15 @@ exports.getCategoryProducts = catchAsyncErrors(async (req, res, next) => {
 
   // change _id to category name in the result
   subCategoryProducts = subCategoryProducts.map(async ({ _id, products }) => {
-    let subCategory = await SubCategory.findById(_id)
+    let subCategory = await SubCategory.findById(_id);
     return {
       subCategory: subCategory?.name,
       subCategoryImage: subCategory?.image,
       products,
-    }
+    };
   });
 
-  const results = await Promise.all(subCategoryProducts)
+  const results = await Promise.all(subCategoryProducts);
   res.status(200).json({
     success: true,
     products: results,

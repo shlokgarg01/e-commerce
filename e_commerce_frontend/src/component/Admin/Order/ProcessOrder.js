@@ -88,7 +88,10 @@ const ProcessOrder = () => {
                         : "text-danger fw-bold"
                     }
                   >
-                    {order.orderStatus && Capitalize(order.orderStatus)}
+                    {order.orderStatus &&
+                      Capitalize(
+                        order.orderStatus || Enums.ORDER_STATUS.RECEIVED
+                      )}
                   </span>
                 </div>
                 <div>
@@ -131,16 +134,38 @@ const ProcessOrder = () => {
                       className="form-select form-select"
                     >
                       <option value="">Choose Status</option>
+                      {order.orderStatus === "" && (
+                        <>
+                          <option value={Enums.ORDER_STATUS.DISPATCHED}>
+                            Dispatched
+                          </option>
+
+                          <option value={Enums.ORDER_STATUS.CANCELLED}>
+                            Cancel
+                          </option>
+                        </>
+                      )}
+
                       {order.orderStatus === Enums.ORDER_STATUS.RECEIVED && (
-                        <option value={Enums.ORDER_STATUS.DISPATCHED}>
-                          Dispatched
-                        </option>
+                        <>
+                          <option value={Enums.ORDER_STATUS.DISPATCHED}>
+                            Dispatched
+                          </option>
+
+                          <option value={Enums.ORDER_STATUS.CANCELLED}>
+                            Cancel
+                          </option>
+                        </>
                       )}
 
                       {order.orderStatus === Enums.ORDER_STATUS.DISPATCHED && (
-                        <option value={Enums.ORDER_STATUS.DELIVERED}>
+                        <><option value={Enums.ORDER_STATUS.DELIVERED}>
                           Delivered
                         </option>
+                        <option value={Enums.ORDER_STATUS.CANCELLED}>
+                            Cancel
+                          </option>
+                        </>
                       )}
                     </select>
                   </div>
@@ -182,7 +207,8 @@ const ProcessOrder = () => {
                     {order.orderItems?.reduce((sum, currentValue) => {
                       return sum + currentValue.price * currentValue.quantity;
                     }, 0)}
-                  </b><br />
+                  </b>
+                  <br />
                   Shipping Price - <b>₹ {order.shippingPrice}</b>
                   <br />
                   Tax - <b>₹ {order.taxPrice}</b>

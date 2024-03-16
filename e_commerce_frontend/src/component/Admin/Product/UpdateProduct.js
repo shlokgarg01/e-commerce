@@ -57,6 +57,16 @@ const UpdateProduct = () => {
       setTrending(product.trending);
       setFavourite(product.favourite);
       setOldImages(product.images);
+
+      // let file = product.images[0].public_url
+      //   const reader = new FileReader();
+      //   reader.onload = () => {
+      //     if (reader.readyState === 2) {
+      //       setImages((old) => [...old, reader.result]);
+      //     }
+      //   };
+      //   reader.readAsDataURL(file);
+      // console.log(images)
     }
 
     if (error) {
@@ -303,7 +313,6 @@ const UpdateProduct = () => {
                   name="avatar"
                   accept="image/*"
                   multiple
-                  required
                   onChange={updateProductImagesChange}
                 />
               </div>

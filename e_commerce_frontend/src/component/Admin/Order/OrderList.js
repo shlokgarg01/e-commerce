@@ -86,7 +86,7 @@ const OrderList = () => {
                                   : "text-danger"
                               }
                             >
-                              {Capitalize(order.orderStatus)}
+                              {Capitalize(order.orderStatus || Enums.ORDER_STATUS.RECEIVED)}
                             </td>
                             <td>{order.orderItems.length}</td>
                             <td>₹ {order.totalPrice}</td>

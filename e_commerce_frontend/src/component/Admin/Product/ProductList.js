@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   clearErrors,
@@ -13,14 +13,20 @@ import { DELETE_PRODUCT_RESET } from "../../../constants/productConstants";
 import "../Admin.css";
 
 const ProductList = () => {
+  const [searchTerm, setSearchTerm] = useState("");
   const alert = useAlert();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const { error, products, loading } = useSelector((state) => state.products);
+  const [filteredProducts, setFilteredProducts] = useState(products)
   const { error: deleteError, isDeleted } = useSelector(
     (state) => state.product
   );
+
+  useEffect(() =>{
+    setFilteredProducts(products)
+  }, [products])
 
   useEffect(() => {
     if (error) {
@@ -44,6 +50,11 @@ const ProductList = () => {
 
   const deleteProductHandler = (id) => dispatch(deleteProduct(id));
 
+  const search = () => {
+    let x = products.filter(product => product.name.toLowerCase().includes(searchTerm.toLowerCase()))
+    setFilteredProducts(x)
+  }
+
   return (
     <>
       <MetaData title="All Products" />
@@ -65,6 +76,30 @@ const ProductList = () => {
                 </ul>
               </div>
               <div className="card-body">
+                <div className="d-flex flex-row">
+                  <input
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    placeholder="Seacrh Product"
+                    className="form-control"
+                    aria-describedby={`basic-addon`}
+                  />
+                  <input
+                  onClick={search}
+                    type="button"
+                    value="Search"
+                    className="btn btn-primary mx-3"
+                  />
+                  <input
+                  onClick={() => {
+                    setFilteredProducts(products)
+                    setSearchTerm("")
+                  }}
+                    type="button"
+                    value="Reset"
+                    className="btn btn-danger"
+                  />
+                </div>
                 <div className="table-responsive">
                   <table className="table table-striped">
                     <thead>
@@ -83,14 +118,14 @@ const ProductList = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {products.length === 0 ? (
+                      {filteredProducts.length === 0 ? (
                         <tr>
                           <td className="text-center fw-bold" colSpan={11}>
                             No Products Yet
                           </td>
                         </tr>
                       ) : (
-                        products.map((product, index) => (
+                        filteredProducts.map((product, index) => (
                           <tr key={index} className="align-middle">
                             <th scope="row">{index + 1}.</th>
                             {/* <td>{product._id}</td> */}
