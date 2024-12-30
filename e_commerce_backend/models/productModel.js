@@ -26,6 +26,11 @@ const productSchema = new mongoose.Schema(
       default: 0,
       min: [0, "Discount cannot be less than 0"],
     },
+    maxOrderQuantity: {
+      type: Number,
+      default: 0,
+      min: [0, "Maximum order count cannot be less than 0"],
+    },
     ordersCount: {
       type: Number,
       default: 0,

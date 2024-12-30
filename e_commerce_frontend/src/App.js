@@ -27,6 +27,7 @@ import UpdateCoupon from "./component/Admin/Order/UpdateCoupon";
 import SubCategoryList from "./component/Admin/SubCategory/SubCategoryList";
 import UpdateSubCategory from "./component/Admin/SubCategory/UpdateSubCategory";
 import NewSubCategory from "./component/Admin/SubCategory/NewSubCategory";
+import Banners from "./component/Admin/Constants/Banners";
 
 export default function App() {
   useEffect(() => {
@@ -77,6 +78,8 @@ export default function App() {
           <Route exact path="/admin/coupons" element={<CouponsList />} />
           <Route exact path="/admin/coupon" element={<NewCoupon />} />
           <Route exact path="/admin/coupon/:id" element={<UpdateCoupon />} />
+
+          <Route exact path="admin/banners" element={<Banners />} />
 
           <Route
             exact

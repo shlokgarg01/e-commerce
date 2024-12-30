@@ -18,6 +18,7 @@ const UpdateCategory = () => {
   const params = useParams();
 
   const [name, setName] = useState("");
+  const [order, setOrder] = useState(null);
   const [oldImages, setOldImages] = useState([]);
   const [images, setImages] = useState([]);
   const [imagePreview, setImagesPreview] = useState([]);
@@ -35,6 +36,7 @@ const UpdateCategory = () => {
       dispatch(getCategoryDetails(categoryId));
     } else {
       setName(category.name);
+      setOrder(category.order)
       setOldImages([category.image]);
     }
 
@@ -60,7 +62,7 @@ const UpdateCategory = () => {
     e.preventDefault();
 
     const myForm= {
-      name, image: images[0]
+      name, order, image: images[0]
     }
     dispatch(updateCategory(categoryId, myForm));
   };
@@ -92,7 +94,7 @@ const UpdateCategory = () => {
         style={{
           display: "flex",
           justifyContent: "center",
-          alingItems: "center",
+          alignItems: "center",
           padding: 20,
         }}
       >
@@ -113,6 +115,20 @@ const UpdateCategory = () => {
                     required
                   />
               </div>
+
+              <label className="form-label">Order</label>
+              <div className="input-group mb-3">
+                  <input
+                    type="number"
+                    className="form-control"
+                    placeholder="Category Order"
+                    value={order}
+                    onChange={(e) => setOrder(e.target.value)}
+                    aria-label="order"
+                    aria-describedby="basic-addon1"
+                    required
+                  />
+                </div>
               <div className="mb-3">
               <label className="form-label">Category Image</label>
                 <input

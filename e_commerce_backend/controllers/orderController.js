@@ -5,7 +5,7 @@ const Product = require("../models/productModel");
 const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const enums = require("../utils/enums");
-const { sendOrderCreateSMS } = require("../utils/sendNotification");
+const { sendOrderCreateSMS, sendRatingSMS } = require("../utils/sendNotification");
 
 // Create new order
 exports.newOrder = catchAsyncErrors(async (req, res, next) => {
@@ -86,7 +86,7 @@ exports.myOrders = catchAsyncErrors(async (req, res, next) => {
 exports.getAllOrders = catchAsyncErrors(async (req, res, next) => {
   const orders = await Order.find({
     orderStatus: { $ne: enums.ORDER_STATUS.PLACED },
-  });
+  }).populate("user");
 
   let totalAmount = 0;
   orders.forEach((order) => {
@@ -102,7 +102,7 @@ exports.getAllOrders = catchAsyncErrors(async (req, res, next) => {
 
 // Update Order Status -- Admin
 exports.updateOrder = catchAsyncErrors(async (req, res, next) => {
-  const order = await Order.findById(req.params.id);
+  const order = await Order.findById(req.params.id).populate("user");
   if (!order) {
     return next(new ErrorHandler("Order not found with the given Id.", 404));
   }
@@ -122,6 +122,7 @@ exports.updateOrder = catchAsyncErrors(async (req, res, next) => {
   order.orderStatus = req.body.status;
 
   if (req.body.status === enums.ORDER_STATUS.DELIVERED) {
+    sendRatingSMS({contactNumber: order.user.contactNumber})
     order.deliveredAt = Date.now();
     if (order.paymentInfo.status === enums.PAYMENT_STATUS.FAILED) {
       order.paymentInfo.status = enums.PAYMENT_STATUS.SUCCEEDED;
@@ -176,8 +177,6 @@ exports.checkPaymentStatus = catchAsyncErrors(async (req, res, next) => {
     .request(options)
     .then(async (response) => {
       if (response.data.success === true) {
-        console.log(response.data);
-
         // updating order status in case payment in success.
         await Order.findOneAndUpdate(
           { "paymentInfo.transactionId": merchantTransactionId },

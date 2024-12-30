@@ -32,6 +32,7 @@ import {
   newCouponReducer,
 } from "./reducers/couponReducer";
 import { newSubCategoryReducer, subCategoriesForCategoryReducer, subCategoriesReducer, subCategoryDetailsReducer, subCategoryReducer } from "./reducers/subCategoryReducer";
+import { bannersReducer, updateBannerReducer } from "./reducers/constantsReducer";
 
 const reducer = combineReducers({
   products: productsReducer,
@@ -66,6 +67,9 @@ const reducer = combineReducers({
   newCoupon: newCouponReducer,
   couponDetails: couponDetailsReducer,
   coupon: couponReducer,
+
+  banners: bannersReducer,
+  updateBanners: updateBannerReducer,
 });
 
 let initialState = {};

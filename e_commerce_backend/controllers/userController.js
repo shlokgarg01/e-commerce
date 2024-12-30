@@ -174,9 +174,39 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-// get all users
+// get all users -- Admin
 exports.getAllUsers = catchAsyncErrors(async (req, res, next) => {
-  const users = await User.find();
+  // The below query finds the total numnber of orders placed by a user & orders placed in last 30 days
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+  const users = await User.aggregate([
+    {
+      $lookup: {
+        from: "orders",
+        localField: "_id",
+        foreignField: "user",
+        as: "userOrders",
+      },
+    },
+    {
+      $addFields: {
+        totalOrderCount: { $size: "$userOrders" },
+        oneMonthOrderCount: {
+          $size: {
+            $filter: {
+              input: "$userOrders",
+              as: "order",
+              cond: { $gte: ["$$order.createdAt", thirtyDaysAgo] }, // Orders placed in the last 30 days
+            },
+          },
+        },
+        lastOrderDate: {
+          $max: "$userOrders.createdAt", // Find the latest order date
+        },
+      },
+    },
+  ]);
 
   res.status(200).json({
     success: true,
@@ -265,7 +295,7 @@ exports.sendOTPForRegistration = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-// autheticate the OTP for registration
+// authenticate the OTP for registration
 exports.authenticateUserViaOTPForRegistration = catchAsyncErrors(async (req, res, next) => {
   const { contactNumber, otp } = req.body;
   let hash = otpHash(otp);
@@ -294,7 +324,7 @@ exports.authenticateUserViaOTPForRegistration = catchAsyncErrors(async (req, res
 
 // register user via OTP
 exports.registerUserViaOTP = catchAsyncErrors(async (req, res, next) => {
-  const { name, email, contactNumber, otp } = req.body;
+  const { name, email, contactNumber, pincode, otp } = req.body;
   let hash = otpHash(otp);
 
   const queriedOTPs = await SignupOTP.findOne({
@@ -307,11 +337,19 @@ exports.registerUserViaOTP = catchAsyncErrors(async (req, res, next) => {
       new ErrorHandler("Could not match the OTP. Please try again.", 400)
     );
   }
+
+  const serviceablePincodes = JSON.parse(process.env.SERVICEABLE_PINCODES)
+  if (!serviceablePincodes.includes(pincode)) {
+    return next(
+      new ErrorHandler("The entered pincode is not serviceable right now.", 400)
+    );
+  }
   
   const user = await User.create({
     name,
     email,
     contactNumber,
+    pincode
     // avatar: {
       //   public_id: "This is a sample id",
       //   url: "This is a sample url",
@@ -354,7 +392,7 @@ exports.sendOTPForLogin = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-// autheticate the OTP for Login
+// authenticate the OTP for Login
 exports.authenticateUserViaOTPForLogin = catchAsyncErrors(async (req, res, next) => {
   const { contactNumber, otp } = req.body;
   let hash = otpHash(otp);

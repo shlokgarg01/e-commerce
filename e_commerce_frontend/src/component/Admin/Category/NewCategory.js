@@ -12,10 +12,11 @@ const NewCategory = () => {
   const navigate = useNavigate();
 
   const [name, setName] = useState("");
+  const [order, setOrder] = useState(null);
   const [images, setImages] = useState([]);
   const [imagePreview, setImagesPreview] = useState([]);
 
-  const { loading, error, success } = useSelector((state) => state.newCategory);
+  const { error, success } = useSelector((state) => state.newCategory);
 
   useEffect(() => {
     if (error) {
@@ -33,7 +34,7 @@ const NewCategory = () => {
   const submitForm = (e) => {
     e.preventDefault();
     const myForm= {
-      name, image: images[0]
+      name, order, image: images[0]
     }
     dispatch(createCategory(myForm));
   };
@@ -72,7 +73,6 @@ const NewCategory = () => {
           <h5 className="card-header text-center">CREATE CATEGORY</h5>
           <div className="card-body">
             <form onSubmit={submitForm} className="d-flex flex-column">
-              <div className="form-floating mb-3">
                 <div className="input-group mb-3">
                   <input
                     type="text"
@@ -85,7 +85,20 @@ const NewCategory = () => {
                     required
                   />
                 </div>
-              </div>
+
+                <div className="input-group mb-3">
+                  <input
+                    type="number"
+                    className="form-control"
+                    placeholder="Category Order"
+                    value={order}
+                    onChange={(e) => setOrder(e.target.value)}
+                    aria-label="order"
+                    aria-describedby="basic-addon1"
+                    required
+                  />
+                </div>
+
               <div id="createProductFormFile" className="input-group mb-3">
                 <input
                   type="file"

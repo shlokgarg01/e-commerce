@@ -18,6 +18,7 @@ const NewProduct = () => {
   const [discount, setDiscount] = useState();
   const [description, setDescription] = useState("");
   const [stock, setStock] = useState();
+  const [maxOrderQuantity, setMaxOrderQuantity] = useState();
   const [images, setImages] = useState([]);
   const [imagePreview, setImagesPreview] = useState([]);
   const [category, setCategory] = useState("");
@@ -48,7 +49,7 @@ const NewProduct = () => {
     e.preventDefault();
 
     const myForm= {
-      name, price, discount, description, stock, category, subCategory, trending, favourite, images: []
+      name, price, discount, description, stock, maxOrderQuantity, category, subCategory, trending, favourite, images: []
     }
     images.forEach((image) => {
       myForm.images.push(image);
@@ -122,32 +123,34 @@ const NewProduct = () => {
                   />
                 </div>
               </div>
-              <div className="input-group mb-3">
-                <div className="input-group mb-3">
-                  <input
-                    type="number"
-                    className="form-control"
-                    placeholder="Price"
-                    value={price}
-                    onChange={(e) => setPrice(e.target.value)}
-                    aria-label="price"
-                    aria-describedby="basic-addon1"
-                    required
-                  />
+              <div className="row">
+                <div className="col-6 mb-3">
+                  <div className="input-group mb-3">
+                    <input
+                      type="number"
+                      className="form-control"
+                      placeholder="Price"
+                      value={price}
+                      onChange={(e) => setPrice(e.target.value)}
+                      aria-label="price"
+                      aria-describedby="basic-addon1"
+                      required
+                    />
+                  </div>
                 </div>
-              </div>
-              <div className="input-group mb-3">
-                <div className="input-group mb-3">
-                  <input
-                    type="number"
-                    className="form-control"
-                    placeholder="Discount"
-                    value={discount}
-                    onChange={(e) => setDiscount(e.target.value)}
-                    aria-label="discount"
-                    aria-describedby="basic-addon1"
-                    required
-                  />
+                <div className="col-6 mb-3">
+                  <div className="input-group mb-3">
+                    <input
+                      type="number"
+                      className="form-control"
+                      placeholder="Discount"
+                      value={discount}
+                      onChange={(e) => setDiscount(e.target.value)}
+                      aria-label="discount"
+                      aria-describedby="basic-addon1"
+                      required
+                    />
+                  </div>
                 </div>
               </div>
               <div className="input-group mb-3">
@@ -165,29 +168,30 @@ const NewProduct = () => {
                 </div>
               </div>
 
-              <div className="input-group mb-3">
-                <div className="input-group mb-3">
-                  <select
-                    onChange={(e) => {
-                      const selected_element = e.target.childNodes[e.target.selectedIndex]
-                      const category_id =  selected_element.getAttribute('id');
-                      setCategory(e.target.value)
-                      fetchSubCategories(category_id)
-                    }}
-                    className="form-select form-select"
-                  >
-                    <option value="">Choose Category</option>
-                    {categories.map((category) => (
-                      <option key={category._id} value={category.name} id={category._id}>
-                        {category.name}
-                      </option>
-                    ))}
-                  </select>
+              <div className="row">
+                <div className="col-6 mb-3">
+                  <div className="input-group mb-3">
+                    <select
+                      onChange={(e) => {
+                        const selected_element = e.target.childNodes[e.target.selectedIndex]
+                        const category_id =  selected_element.getAttribute('id');
+                        setCategory(e.target.value)
+                        fetchSubCategories(category_id)
+                      }}
+                      className="form-select form-select"
+                    >
+                      <option value="">Choose Category</option>
+                      {categories.map((category) => (
+                        <option key={category._id} value={category.name} id={category._id}>
+                          {category.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
-              </div>
 
-              {subCategories?.length > 0 && (
-                <div className="input-group mb-3">
+                {subCategories?.length > 0 && (
+                <div className="col-6 mb-3">
                   <div className="input-group mb-3">
                     <select
                       onChange={(e) => {
@@ -207,6 +211,21 @@ const NewProduct = () => {
                   </div>
                 </div>
               )}
+              </div>
+
+              <div className="form-floating mb-3">
+                <div className="input-group mb-3">
+                  <input
+                    type="number"
+                    className="form-control"
+                    placeholder="Max Quantity"
+                    value={maxOrderQuantity}
+                    onChange={(e) => setMaxOrderQuantity(e.target.value)}
+                    aria-label="maxOrderQuantity"
+                    aria-describedby="basic-addon1"
+                  />
+                </div>
+              </div>
 
               <div className="mb-3 form-check">
                 <input

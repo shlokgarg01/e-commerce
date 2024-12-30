@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import "../Admin.css";
 import { DELETE_COUPON_RESET } from "../../../constants/couponConstants";
 import { deleteCoupon, getAllCoupons, clearErrors } from "../../../actions/couponAction";
+import { getDateFromDateString } from "../../../helpers/DateHelper";
 
 const CouponsList = () => {
   const alert = useAlert();
@@ -96,7 +97,7 @@ const CouponsList = () => {
                               }>{coupon.type}</td>
                             <td>{coupon.value}</td>
                             <td>₹ {coupon.minCartValue}</td>
-                            <td>{new Date(coupon.expires).toDateString()}</td>
+                            <td>{getDateFromDateString(coupon.expires)}</td>
                             <td>
                               <input
                                 onClick={() =>

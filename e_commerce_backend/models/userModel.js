@@ -30,6 +30,10 @@ const userSchema = new mongoose.Schema(
         message: "Provided Contact Number is invalid.",
       },
     },
+    pincode: {
+      type: Number,
+      required: [true, "Please enter your pincode."]
+    },
     password: {
       type: String,
       minLength: [6, "Password should be greater than 6 characters"],

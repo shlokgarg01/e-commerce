@@ -20,6 +20,10 @@ const categorySchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+  order: {
+    type: Number,
+    default: null
+  },
   user: {
     type: mongoose.Schema.ObjectId,
     ref: "User",

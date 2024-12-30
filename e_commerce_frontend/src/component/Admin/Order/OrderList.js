@@ -10,6 +10,7 @@ import MetaData from "../../layout/MetaData";
 import { useNavigate } from "react-router-dom";
 import { Enums } from "../../../utils/Enums";
 import { Capitalize } from "../../../helpers/StringHelpers";
+import { getDateFromDateString } from "../../../helpers/DateHelper";
 // import { DELETE_PRODUCT_RESET } from "../../constants/productConstants";
 
 const OrderList = () => {
@@ -61,6 +62,8 @@ const OrderList = () => {
                       <tr>
                         <th scope="col">S.No</th>
                         <th scope="col">Order Id</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Contact</th>
                         <th scope="col">Order Status</th>
                         <th scope="col">Items Quantity</th>
                         <th scope="col">Amount</th>
@@ -79,6 +82,8 @@ const OrderList = () => {
                           <tr key={index} className="align-middle">
                             <th scope="row">{index + 1}.</th>
                             <td>{order._id}</td>
+                            <td>{order.user.name}</td>
+                            <td>{order.user.contactNumber}</td>
                             <td
                               className={
                                 order.orderStatus === Enums.ORDER_STATUS.DELIVERED
@@ -101,7 +106,7 @@ const OrderList = () => {
                                 ? "PAID"
                                 : "NOT PAID"}
                             </td>
-                            <td>{new Date(order.createdAt).toDateString()}</td>
+                            <td>{getDateFromDateString(order.createdAt)}</td>
                             <td>
                               <input
                                 onClick={() =>

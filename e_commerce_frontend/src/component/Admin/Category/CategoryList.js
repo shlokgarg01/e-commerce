@@ -71,6 +71,7 @@ const CategoryList = () => {
                         <th scope="col">S.No</th>
                         <th scope="col">Category Id</th>
                         <th scope="col">Name</th>
+                        <th scope="col">Order</th>
                         <th scope="col">Action</th>
                         <th scope="col">Action</th>
                       </tr>
@@ -88,6 +89,7 @@ const CategoryList = () => {
                             <th scope="row">{index + 1}.</th>
                             <td>{category._id}</td>
                             <td>{category.name}</td>
+                            <td>{category.order}</td>
                             <td>
                               <input
                                 onClick={() =>

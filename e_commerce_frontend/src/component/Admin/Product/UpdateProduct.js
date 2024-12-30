@@ -1,9 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { Fragment, useEffect, useState } from "react";
 import MetaData from "../../layout/MetaData";
 import { useAlert } from "react-alert";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllCategories, clearErrors } from "../../../actions/categoryAction";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { UPDATE_PRODUCT_RESET } from "../../../constants/productConstants";
 import {
   updateProduct,
@@ -15,6 +16,7 @@ const UpdateProduct = () => {
   const dispatch = useDispatch();
   const alert = useAlert();
   const navigate = useNavigate();
+  const location = useLocation()
   const params = useParams();
 
   const [name, setName] = useState("");
@@ -22,6 +24,7 @@ const UpdateProduct = () => {
   const [discount, setDiscount] = useState();
   const [description, setDescription] = useState("");
   const [stock, setStock] = useState();
+  const [maxOrderQuantity, setMaxOrderQuantity] = useState();
   const [category, setCategory] = useState("");
   const [subCategory, setSubCategory] = useState("");
   const [favourite, setFavourite] = useState(false);
@@ -52,6 +55,7 @@ const UpdateProduct = () => {
       setPrice(product.price);
       setDiscount(product.discount);
       setStock(product.stock);
+      setMaxOrderQuantity(product.maxOrderQuantity)
       setCategory(product.category);
       setSubCategory(product.subCategory?._id);
       setTrending(product.trending);
@@ -79,8 +83,9 @@ const UpdateProduct = () => {
     }
 
     if (isUpdated) {
+      const scrollPosition = location.state?.scrollPosition || 0;
       alert.success("Product Updated Successfully");
-      navigate("/admin/products");
+      navigate("/admin/products", {state: { scrollPosition }});
       dispatch({ type: UPDATE_PRODUCT_RESET });
     }
 
@@ -105,6 +110,7 @@ const UpdateProduct = () => {
       discount,
       description,
       stock,
+      maxOrderQuantity,
       category,
       subCategory,
       trending,
@@ -182,31 +188,33 @@ const UpdateProduct = () => {
                   required
                 />
               </div>
-              <div className="mb-3">
-                <label className="form-label">Price</label>
-                <input
-                  type="number"
-                  className="form-control"
-                  placeholder="Price"
-                  value={price}
-                  onChange={(e) => setPrice(e.target.value)}
-                  aria-label="price"
-                  aria-describedby="basic-addon1"
-                  required
-                />
-              </div>
-              <div className="mb-3">
-                <label className="form-label">Discount</label>
-                <input
-                  type="number"
-                  className="form-control"
-                  placeholder="Discount"
-                  value={discount}
-                  onChange={(e) => setDiscount(e.target.value)}
-                  aria-label="discount"
-                  aria-describedby="basic-addon1"
-                  required
-                />
+              <div className="row">
+                <div className="col-6 mb-3">
+                  <label className="form-label">Price</label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    placeholder="Price"
+                    value={price}
+                    onChange={(e) => setPrice(e.target.value)}
+                    aria-label="price"
+                    aria-describedby="basic-addon1"
+                    required
+                  />
+                </div>
+                <div className="col-6 mb-3">
+                  <label className="form-label">Discount</label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    placeholder="Discount"
+                    value={discount}
+                    onChange={(e) => setDiscount(e.target.value)}
+                    aria-label="discount"
+                    aria-describedby="basic-addon1"
+                    required
+                  />
+                </div>
               </div>
               <div className="mb-3">
                 <label className="form-label">Description</label>
@@ -222,35 +230,36 @@ const UpdateProduct = () => {
                 />
               </div>
 
-              <div className="mb-3">
-                <label className="form-label">Category</label>
-                <select
-                  value={category}
-                  onChange={(e) => {
-                    const selected_element =
-                      e.target.childNodes[e.target.selectedIndex];
-                    const category_id = selected_element.getAttribute("id");
-                    setCategory(e.target.value);
-                    fetchSubCategories(category_id);
-                  }}
-                  className="form-select form-select"
-                >
-                  <option value="">Choose Category</option>
-                  {categories.map((category) => (
-                    <option
-                      key={category._id}
-                      id={category._id}
-                      value={category.name}
-                    >
-                      {category.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              <div className="row">
+                <div className="col-6 mb-3">
+                  <label className="form-label">Category</label>
+                  <select
+                    value={category}
+                    onChange={(e) => {
+                      const selected_element =
+                        e.target.childNodes[e.target.selectedIndex];
+                      const category_id = selected_element.getAttribute("id");
+                      setCategory(e.target.value);
+                      fetchSubCategories(category_id);
+                    }}
+                    className="form-select form-select"
+                  >
+                    <option value="">Choose Category</option>
+                    {categories.map((category) => (
+                      <option
+                        key={category._id}
+                        id={category._id}
+                        value={category.name}
+                      >
+                        {category.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
-              {subCategories?.length > 0 && (
-                <div className="input-group mb-3">
-                  <div className="input-group mb-3">
+                {subCategories?.length > 0 && (
+                  <div className="col-6 mb-3">
+                    <label className="form-label">Sub Category</label>
                     <select
                       onChange={(e) => {
                         const selected_element =
@@ -276,8 +285,25 @@ const UpdateProduct = () => {
                       ))}
                     </select>
                   </div>
+                )}
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">Maximum Quantity</label><br />
+                <div className="input-group mb-3">
+                  <input
+                    type="number"
+                    className="form-control"
+                    placeholder="Max Quantity"
+                    value={maxOrderQuantity}
+                    onChange={(e) => {
+                      setMaxOrderQuantity(e.target.value)
+                    }}
+                    aria-label="maxOrderQuantity"
+                    aria-describedby="basic-addon1"
+                  />
                 </div>
-              )}
+              </div>
 
               <div className="mb-3 form-check">
                 <input

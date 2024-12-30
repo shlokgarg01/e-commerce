@@ -26,7 +26,7 @@ exports.createCategory = catchAsyncErrors(async (req, res, next) => {
 // get all categories
 exports.getAllCategories = catchAsyncErrors(async (req, res) => {
   const categoryCount = await Category.countDocuments();
-  const categories = await Category.find();
+  const categories = await Category.find().sort({"order": 1});
 
   return res.status(200).json({
     success: true,

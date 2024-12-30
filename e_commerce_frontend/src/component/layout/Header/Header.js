@@ -68,6 +68,11 @@ const Header = () => {
                   Coupons
                 </Link>
               </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/admin/banners">
+                  Banners
+                </Link>
+              </li>
             </ul>
           )}
           <ul className="navbar-nav mb-2 mb-lg-0 ms-auto mr-4">

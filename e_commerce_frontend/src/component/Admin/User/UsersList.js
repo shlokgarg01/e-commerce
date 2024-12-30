@@ -7,6 +7,7 @@ import {
 import { useAlert } from "react-alert";
 import MetaData from "../../layout/MetaData";
 import { Capitalize } from '../../../helpers/StringHelpers'
+import { getDateFromDateString } from "../../../helpers/DateHelper";
 
 const UsersList = () => {
   const alert = useAlert();
@@ -57,6 +58,9 @@ const UsersList = () => {
                         <th scope="col">Name</th>
                         <th scope="col">Email</th>
                         <th scope="col">Contact Number</th>
+                        <th scope="col">Total Orders</th>
+                        <th scope="col">Last month Orders</th>
+                        <th scope="col">Last Placed</th>
                         <th scope="col">Role</th>
                       </tr>
                     </thead>
@@ -72,6 +76,9 @@ const UsersList = () => {
                           <td>{user.name}</td>
                           <td>{user.email}</td>
                           <td>{user.contactNumber}</td>
+                          <td>{user.totalOrderCount}</td>
+                          <td>{user.oneMonthOrderCount}</td>
+                          <td>{getDateFromDateString(user.lastOrderDate)}</td>
                           <td
                             className={
                               user.role === "admin"

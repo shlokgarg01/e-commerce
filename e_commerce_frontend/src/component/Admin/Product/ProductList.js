@@ -8,7 +8,7 @@ import {
 import { Link } from "react-router-dom";
 import { useAlert } from "react-alert";
 import MetaData from "../../layout/MetaData";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { DELETE_PRODUCT_RESET } from "../../../constants/productConstants";
 import "../Admin.css";
 
@@ -17,6 +17,7 @@ const ProductList = () => {
   const alert = useAlert();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const { error, products, loading } = useSelector((state) => state.products);
   const [filteredProducts, setFilteredProducts] = useState(products)
@@ -24,7 +25,13 @@ const ProductList = () => {
     (state) => state.product
   );
 
-  useEffect(() =>{
+  useEffect(() => {
+    if (location.state?.scrollPosition) {
+      window.scrollTo(0, location.state.scrollPosition);
+    }
+  }, [location.state])
+
+  useEffect(() => {
     setFilteredProducts(products)
   }, [products])
 
@@ -85,16 +92,16 @@ const ProductList = () => {
                     aria-describedby={`basic-addon`}
                   />
                   <input
-                  onClick={search}
+                    onClick={search}
                     type="button"
                     value="Search"
                     className="btn btn-primary mx-3"
                   />
                   <input
-                  onClick={() => {
-                    setFilteredProducts(products)
-                    setSearchTerm("")
-                  }}
+                    onClick={() => {
+                      setFilteredProducts(products)
+                      setSearchTerm("")
+                    }}
                     type="button"
                     value="Reset"
                     className="btn btn-danger"
@@ -111,6 +118,7 @@ const ProductList = () => {
                         <th scope="col">Price</th>
                         <th scope="col">Discount</th>
                         <th scope="col">Final Price</th>
+                        <th scope="col">Max Quantity</th>
                         <th scope="col">Category</th>
                         <th scope="col">Sub Category</th>
                         <th scope="col">Action</th>
@@ -134,12 +142,15 @@ const ProductList = () => {
                             <td>{product.price}</td>
                             <td>{product.discount}</td>
                             <td>{product.finalPrice}</td>
+                            <td>{product?.maxOrderQuantity > 0 ? product?.maxOrderQuantity : null}</td>
                             <td>{product.category}</td>
                             <td>{product?.subCategory?.name}&nbsp;</td>
                             <td>
                               <input
-                                onClick={() =>
-                                  navigate(`/admin/product/${product._id}`)
+                                onClick={() => {
+                                  const scrollPosition = window.scrollY;
+                                  navigate(`/admin/product/${product._id}`, { state: { scrollPosition } })
+                                }
                                 }
                                 value="Edit"
                                 readOnly
