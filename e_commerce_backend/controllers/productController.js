@@ -58,13 +58,46 @@ exports.getAllProducts = catchAsyncErrors(async (req, res) => {
 
 // get all products -- Admin
 exports.getAdminProducts = catchAsyncErrors(async (req, res) => {
-  const products = await Product.find().populate("subCategory");
+  const page = parseInt(req.query.page, 10) || 1; // Default to page 1
+  const limit = parseInt(req.query.limit, 10) || 20; // Default to 20 products per page
+
+  // Calculate the starting index
+  const skip = (page - 1) * limit;
+
+  // Get the total count of products for pagination metadata
+  const totalProducts = await Product.countDocuments();
+
+  // Fetch products with pagination
+  const products = await Product.find()
+    .populate("subCategory")
+    .skip(skip)
+    .limit(limit);
+
+  // Calculate total pages
+  const totalPages = Math.ceil(totalProducts / limit);
 
   return res.status(200).json({
     success: true,
     products,
+    pagination: {
+      totalProducts,
+      totalPages,
+      currentPage: page,
+      limit,
+    },
   });
 });
+
+
+// search products -- Admin
+exports.searchAdminProducts = catchAsyncErrors(async (req, res) => {
+  const products = await Product.find({ name: { $regex: req.query.name, $options: "i" } }).populate("subCategory")
+
+  return res.status(200).json({
+    success: true,
+    products
+  });
+})
 
 // get trending products
 exports.getTrendingProducts = catchAsyncErrors(async (req, res) => {

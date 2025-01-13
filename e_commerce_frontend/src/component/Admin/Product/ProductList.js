@@ -1,25 +1,31 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   clearErrors,
   getAdminProducts,
   deleteProduct,
+  searchAdminProducts,
 } from "../../../actions/productAction";
 import { Link } from "react-router-dom";
 import { useAlert } from "react-alert";
 import MetaData from "../../layout/MetaData";
 import { useNavigate, useLocation } from "react-router-dom";
 import { DELETE_PRODUCT_RESET } from "../../../constants/productConstants";
+import Loader from '../../../component/layout/Loader/Loader'
 import "../Admin.css";
 
 const ProductList = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [page, setPage] = useState(1);
+  const [limit] = useState(70);
+
   const alert = useAlert();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { error, products, loading } = useSelector((state) => state.products);
+  const { error, products, pagination, loading } = useSelector((state) => state.products);
   const [filteredProducts, setFilteredProducts] = useState(products)
   const { error: deleteError, isDeleted } = useSelector(
     (state) => state.product
@@ -52,14 +58,27 @@ const ProductList = () => {
       dispatch({ type: DELETE_PRODUCT_RESET });
     }
 
-    dispatch(getAdminProducts());
-  }, [dispatch, error, alert, deleteError, isDeleted, navigate]);
+    dispatch(getAdminProducts(page, limit));
+  }, [dispatch, error, alert, deleteError, isDeleted, navigate, page]);
+
+  const handleScroll = () => {
+    const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
+    if (scrollTop + clientHeight >= scrollHeight - 550 && pagination?.currentPage <= pagination?.totalPages) {
+      setPage(prev => prev + 1);
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    }
+  }, [pagination])
 
   const deleteProductHandler = (id) => dispatch(deleteProduct(id));
 
   const search = () => {
-    let x = products.filter(product => product.name.toLowerCase().includes(searchTerm.toLowerCase()))
-    setFilteredProducts(x)
+    dispatch(searchAdminProducts(searchTerm.toLowerCase()));
   }
 
   return (
@@ -87,7 +106,7 @@ const ProductList = () => {
                   <input
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    placeholder="Seacrh Product"
+                    placeholder="Search Product"
                     className="form-control"
                     aria-describedby={`basic-addon`}
                   />
@@ -99,8 +118,8 @@ const ProductList = () => {
                   />
                   <input
                     onClick={() => {
-                      setFilteredProducts(products)
                       setSearchTerm("")
+                      dispatch(getAdminProducts(page, limit))
                     }}
                     type="button"
                     value="Reset"
@@ -172,6 +191,9 @@ const ProductList = () => {
                       )}
                     </tbody>
                   </table>
+                  {
+                    (pagination.currentPage <= pagination?.totalPages) && <Loader small />
+                  }
                 </div>
               </div>
             </div>

@@ -23,6 +23,9 @@ import {
   DELETE_REVIEW_REQUEST,
   DELETE_REVIEW_SUCCESS,
   UPDATE_PRODUCT_SUCCESS,
+  SEARCH_ADMIN_PRODUCT_REQUEST,
+  SEARCH_ADMIN_PRODUCT_SUCCESS,
+  SEARCH_ADMIN_PRODUCT_FAIL,
 } from "../constants/productConstants";
 import axiosInstance from "../utils/Config";
 
@@ -71,18 +74,37 @@ export const getProductDetails = (id) => async (dispatch) => {
 };
 
 // Get all products for Admin
-export const getAdminProducts = () => async (dispatch) => {
+export const getAdminProducts = (page, limit) => async (dispatch) => {
   try {
     dispatch({ type: ADMIN_PRODUCT_REQUEST });
-    const { data } = await axiosInstance.get("/api/v1/admin/products")
+    const { data } = await axiosInstance.get(`/api/v1/admin/products?page=${page}&limit=${limit}`)
 
     dispatch({
       type: ADMIN_PRODUCT_SUCCESS,
       payload: data.products,
+      pagination: data.pagination,
     });
   } catch (error) {
     dispatch({
       type: PRODUCT_DETAILS_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// Search products for Admin
+export const searchAdminProducts = (name) => async (dispatch) => {
+  try {
+    dispatch({ type: SEARCH_ADMIN_PRODUCT_REQUEST });
+    const { data } = await axiosInstance.get(`/api/v1/admin/products/search?name=${name}`)
+
+    dispatch({
+      type: SEARCH_ADMIN_PRODUCT_SUCCESS,
+      payload: data.products
+    });
+  } catch (error) {
+    dispatch({
+      type: SEARCH_ADMIN_PRODUCT_FAIL,
       payload: error.response.data.message,
     });
   }

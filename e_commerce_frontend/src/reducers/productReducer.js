@@ -28,15 +28,20 @@ import {
   DELETE_REVIEW_RESET,
   DELETE_REVIEW_SUCCESS,
   CLEAR_ERRORS,
+  SEARCH_ADMIN_PRODUCT_REQUEST,
+  SEARCH_ADMIN_PRODUCT_SUCCESS,
+  SEARCH_ADMIN_PRODUCT_FAIL,
 } from "../constants/productConstants";
 
 export const productsReducer = (state = { products: [] }, action) => {
   switch (action.type) {
     case ALL_PRODUCT_REQUEST:
     case ADMIN_PRODUCT_REQUEST:
+    case SEARCH_ADMIN_PRODUCT_REQUEST:
       return {
-        loading: true,
-        products: [],
+        loading: false,
+        products: state.products,
+        pagination: {}
       };
     case ALL_PRODUCT_SUCCESS:
       return {
@@ -48,10 +53,17 @@ export const productsReducer = (state = { products: [] }, action) => {
     case ADMIN_PRODUCT_SUCCESS:
       return {
         loading: false,
+        products: [...state.products, ...action.payload],
+        pagination: action.pagination,
+      };
+    case SEARCH_ADMIN_PRODUCT_SUCCESS:
+      return {
+        loading: false,
         products: action.payload,
       };
     case ALL_PRODUCT_FAIL:
     case ADMIN_PRODUCT_FAIL:
+    case SEARCH_ADMIN_PRODUCT_FAIL:
       return {
         loading: false,
         error: action.payload,

@@ -1,10 +1,12 @@
 import React from "react";
 import "./Loader.css";
 
-const Loader = () => {
+const Loader = ({ small }) => {
   return (
-    <div className="loading">
-      <div></div>
+    <div className={small ? "loading_sm" :
+      "loading"
+    }>
+      <div />
     </div>
   );
 };

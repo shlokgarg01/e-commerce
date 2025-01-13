@@ -14,6 +14,7 @@ const {
   getMostOrderedProducts,
   getCategoryProducts,
   getSuggestedProducts,
+  searchAdminProducts,
 } = require("../controllers/productController");
 const { isAuthenticatedUser, authorizeRoles } = require("../middleware/auth");
 const router = express.Router();
@@ -35,6 +36,10 @@ router
 router
   .route("/admin/products")
   .get(isAuthenticatedUser, authorizeRoles("admin"), getAdminProducts);
+
+  router
+  .route("/admin/products/search")
+  .get(isAuthenticatedUser, authorizeRoles("admin"), searchAdminProducts);
 
 router.route("/review").put(isAuthenticatedUser, createProductReview);
 router
