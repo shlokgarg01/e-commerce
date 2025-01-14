@@ -19,9 +19,9 @@ const Home = () => {
 
   useEffect(() => {
     dispatch(getProducts());
-    dispatch(getAllUsers());
+    dispatch(getAllUsers(1, 10));
     dispatch(getAllCategories());
-    dispatch(getAllOrders());
+    dispatch(getAllOrders(1, 10));
   }, [dispatch]);
 
   return (

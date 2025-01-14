@@ -9,7 +9,7 @@ import {
   reviewReducer,
 } from "./reducers/productReducer";
 import {
-  allUsersReduceer,
+  allUsersReducer,
   profileReducer,
   userDetailsReduceer,
   userReducer,
@@ -43,7 +43,7 @@ const reducer = combineReducers({
   productReviews: productReviewsReducer,
   review: reviewReducer,
 
-  allUsers: allUsersReduceer,
+  allUsers: allUsersReducer,
   user: userReducer,
   userDetails: userDetailsReduceer,
   profile: profileReducer,

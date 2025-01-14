@@ -18,7 +18,7 @@ import "../Admin.css";
 const ProductList = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState(1);
-  const [limit] = useState(70);
+  const [limit] = useState(100);
 
   const alert = useAlert();
   const dispatch = useDispatch();
@@ -192,7 +192,7 @@ const ProductList = () => {
                     </tbody>
                   </table>
                   {
-                    (pagination.currentPage <= pagination?.totalPages) && <Loader small />
+                    (pagination?.currentPage <= pagination?.totalPages) && <Loader small />
                   }
                 </div>
               </div>

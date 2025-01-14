@@ -102,18 +102,20 @@ export const userReducer = (state = { user: {} }, action) => {
   }
 };
 
-export const allUsersReduceer = (state = { users: [] }, action) => {
+export const allUsersReducer = (state = { users: [] }, action) => {
   switch (action.type) {
     case ALL_USERS_REQUEST:
       return {
         ...state,
-        loading: true,
+        loading: false,
+        pagination: {}
       };
     case ALL_USERS_SUCCESS:
       return {
         ...state,
         loading: false,
-        users: action.payload,
+        users: [...state.users, ...action.payload],
+        pagination: action.pagination,
       };
     case ALL_USERS_FAIL:
       return {

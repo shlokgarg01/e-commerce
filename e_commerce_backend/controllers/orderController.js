@@ -84,9 +84,19 @@ exports.myOrders = catchAsyncErrors(async (req, res, next) => {
 
 // Get All Orders -- Admin
 exports.getAllOrders = catchAsyncErrors(async (req, res, next) => {
+  const page = parseInt(req.query.page, 10) || 1; // Default to page 1
+  const limit = parseInt(req.query.limit, 10) || 20; // Default to 20 products per page
+  
+  const skip = (page - 1) * limit;
+  const totalOrders = await Order.countDocuments();
+  const totalPages = Math.ceil(totalOrders / limit);
+
   const orders = await Order.find({
     orderStatus: { $ne: enums.ORDER_STATUS.PLACED },
-  }).populate("user");
+  })
+  .populate("user")
+  .skip(skip)
+  .limit(limit);
 
   let totalAmount = 0;
   orders.forEach((order) => {
@@ -97,6 +107,12 @@ exports.getAllOrders = catchAsyncErrors(async (req, res, next) => {
     success: true,
     orders,
     totalAmount,
+    pagination: {
+      totalOrders,
+      totalPages,
+      currentPage: page,
+      limit,
+    },
   });
 });
 

@@ -180,6 +180,13 @@ exports.getAllUsers = catchAsyncErrors(async (req, res, next) => {
   const thirtyDaysAgo = new Date();
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
+  const page = parseInt(req.query.page, 10) || 1; // Default to page 1
+  const limit = parseInt(req.query.limit, 10) || 20; // Default to 20 products per page
+  
+  const skip = (page - 1) * limit;
+  const totalUsers = await User.countDocuments();
+  const totalPages = Math.ceil(totalUsers / limit);
+
   const users = await User.aggregate([
     {
       $lookup: {
@@ -206,11 +213,19 @@ exports.getAllUsers = catchAsyncErrors(async (req, res, next) => {
         },
       },
     },
-  ]);
+  ])
+  .skip(skip)
+  .limit(limit);
 
   res.status(200).json({
     success: true,
     users,
+    pagination: {
+      totalUsers,
+      totalPages,
+      currentPage: page,
+      limit,
+    },
   });
 });
 

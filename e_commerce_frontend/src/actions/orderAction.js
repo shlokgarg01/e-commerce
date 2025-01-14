@@ -16,12 +16,12 @@ import {
 import axiosInstance from "../utils/Config";
 
 // Get All Orders
-export const getAllOrders = () => async (dispatch) => {
+export const getAllOrders = (page, limit) => async (dispatch) => {
   try {
     dispatch({ type: ALL_ORDERS_REQUEST });
-    const { data } = await axiosInstance.get(`/api/v1/admin/orders`) 
+    const { data } = await axiosInstance.get(`/api/v1/admin/orders?page=${page}&limit=${limit}`) 
 
-    dispatch({ type: ALL_ORDERS_SUCCESS, payload: data.orders });
+    dispatch({ type: ALL_ORDERS_SUCCESS, payload: data.orders, pagination: data.pagination });
   } catch (error) {
     dispatch({
       type: ALL_ORDERS_FAIL,

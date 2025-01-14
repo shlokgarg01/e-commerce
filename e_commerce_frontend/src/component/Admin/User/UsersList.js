@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   getAllUsers,
@@ -8,15 +9,32 @@ import { useAlert } from "react-alert";
 import MetaData from "../../layout/MetaData";
 import { Capitalize } from '../../../helpers/StringHelpers'
 import { getDateFromDateString } from "../../../helpers/DateHelper";
+import Loader from "../../layout/Loader/Loader";
 
 const UsersList = () => {
   const alert = useAlert();
   const dispatch = useDispatch();
+  const [page, setPage] = useState(1);
+  const [limit] = useState(100);
 
-  const { error, users, loading } = useSelector((state) => state.allUsers);
+  const { error, users, pagination, loading } = useSelector((state) => state.allUsers);
   const { error: deleteError, isDeleted } = useSelector(
     (state) => state.product
   );
+
+  const handleScroll = () => {
+    const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
+    if (scrollTop + clientHeight >= scrollHeight - 550 && pagination?.currentPage <= pagination?.totalPages) {
+      setPage(prev => prev + 1);
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    }
+  }, [pagination])
 
   useEffect(() => {
     if (error) {
@@ -29,16 +47,8 @@ const UsersList = () => {
       dispatch(clearErrors());
     }
 
-    // if(isDeleted) {
-    //   alert.success("User Deleted!")
-    //   navigate("/admin/users")
-    //   dispatch({type: DELETE_USER_RESET})
-    // }
-
-    dispatch(getAllUsers());
-  }, [dispatch, error, alert, deleteError, isDeleted]);
-
-  // const deleteUserHandler = id => dispatch(deleteUser(id))
+    dispatch(getAllUsers(page, limit));
+  }, [dispatch, error, alert, deleteError, isDeleted, page, limit]);
 
   return (
     <>
@@ -65,7 +75,7 @@ const UsersList = () => {
                       </tr>
                     </thead>
                     <tbody>
-                    {users.length === 0 ? (
+                      {users.length === 0 ? (
                         <tr>
                           <td className="text-center fw-bold" colSpan={7}>No Users Yet</td>
                         </tr>
@@ -93,6 +103,9 @@ const UsersList = () => {
                       ))}
                     </tbody>
                   </table>
+                  {
+                    (pagination?.currentPage <= pagination?.totalPages) && <Loader small />
+                  }
                 </div>
               </div>
             </div>

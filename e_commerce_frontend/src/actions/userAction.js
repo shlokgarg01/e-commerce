@@ -109,11 +109,11 @@ export const logout = () => async (dispatch) => {
 };
 
 // Get All Users
-export const getAllUsers = () => async (dispatch) => {
+export const getAllUsers = (page, limit) => async (dispatch) => {
   try {
     dispatch({ type: ALL_USERS_REQUEST });
-    const { data } = await axiosInstance.get(`/api/v1/admin/users`)
-    dispatch({ type: ALL_USERS_SUCCESS, payload: data.users });
+    const { data } = await axiosInstance.get(`/api/v1/admin/users?page=${page}&limit=${limit}`)
+    dispatch({ type: ALL_USERS_SUCCESS, payload: data.users, pagination: data.pagination });
   } catch (error) {
     dispatch({
       type: ALL_USERS_FAIL,

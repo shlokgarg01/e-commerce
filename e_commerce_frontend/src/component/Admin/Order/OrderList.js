@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   getAllOrders,
   clearErrors,
-  // deleteOrder,
 } from "../../../actions/orderAction";
 import { useAlert } from "react-alert";
 import MetaData from "../../layout/MetaData";
@@ -11,17 +11,31 @@ import { useNavigate } from "react-router-dom";
 import { Enums } from "../../../utils/Enums";
 import { Capitalize } from "../../../helpers/StringHelpers";
 import { getDateFromDateString } from "../../../helpers/DateHelper";
-// import { DELETE_PRODUCT_RESET } from "../../constants/productConstants";
+import Loader from "../../layout/Loader/Loader";
 
 const OrderList = () => {
   const alert = useAlert();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { error, orders, loading } = useSelector((state) => state.allOrders);
-  // const { error: deleteError, isDeleted } = useSelector(
-  //   (state) => state.order
-  // );
+  const [page, setPage] = useState(1);
+  const [limit] = useState(100);
+
+  const { error, orders, pagination, loading } = useSelector((state) => state.allOrders);
+
+  const handleScroll = () => {
+    const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
+    if (scrollTop + clientHeight >= scrollHeight - 550 && pagination?.currentPage <= pagination?.totalPages) {
+      setPage(prev => prev + 1);
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    }
+  }, [pagination])
 
   useEffect(() => {
     if (error) {
@@ -29,23 +43,8 @@ const OrderList = () => {
       dispatch(clearErrors());
     }
 
-    // if (deleteError) {
-    //   alert.error(deleteError);
-    //   dispatch(clearErrors());
-    // }
-
-    // if(isDeleted) {
-    //   alert.success("Product Deleted!")
-    //   navigate("/admin/products")
-    //   dispatch({type: DELETE_PRODUCT_RESET})
-    // }
-
-    dispatch(getAllOrders());
-  }, [dispatch, error, alert]);
-
-  // const deleteOrderHandler = (id) => {
-  //   dispatch(deleteOrder(id))
-  // };
+    dispatch(getAllOrders(page, limit));
+  }, [dispatch, error, alert, page, limit]);
 
   return (
     <>
@@ -122,6 +121,9 @@ const OrderList = () => {
                       )}
                     </tbody>
                   </table>
+                  {
+                    (pagination?.currentPage <= pagination?.totalPages) && <Loader small />
+                  }
                 </div>
               </div>
             </div>

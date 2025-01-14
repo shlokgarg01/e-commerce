@@ -21,12 +21,15 @@ export const allOrdersReducer = (state = { orders: [] }, action) => {
   switch (action.type) {
     case ALL_ORDERS_REQUEST:
       return {
-        loading: true,
+        loading: false,
+        orders: state.orders,
+        pagination: {}
       };
     case ALL_ORDERS_SUCCESS:
       return {
         loading: false,
-        orders: action.payload,
+        orders: [...state.orders, ...action.payload],
+        pagination: action.pagination,
       };
     case ALL_ORDERS_FAIL:
       return {
