@@ -1,27 +1,15 @@
 import React, { Fragment, useEffect } from "react";
 import MetaData from "../layout/MetaData";
-import { getProducts } from "../../actions/productAction";
 import { useSelector, useDispatch } from "react-redux";
 import Loader from "../layout/Loader/Loader";
-import { getAllUsers } from "../../actions/userAction";
-import { getAllCategories } from "../../actions/categoryAction";
-import { getAllOrders } from "../../actions/orderAction";
+import { getAllStats } from "../../actions/constantsActions";
 
 const Home = () => {
   const dispatch = useDispatch();
-  const { loading, productsCount } = useSelector((state) => state.products);
-  const { orders } = useSelector((state) => state.allOrders);
-  const { users } = useSelector((state) => state.allUsers);
-  const { categories } = useSelector((state) => state.categories);
-
-  let totalAmount = 0;
-  orders && orders.forEach((item) => (totalAmount += item.totalPrice));
+  const {loading, stats} = useSelector((state) => state.stats);
 
   useEffect(() => {
-    dispatch(getProducts());
-    dispatch(getAllUsers(1, 10));
-    dispatch(getAllCategories());
-    dispatch(getAllOrders(1, 10));
+    dispatch(getAllStats())
   }, [dispatch]);
 
   return (
@@ -44,7 +32,7 @@ const Home = () => {
                   fontSize: 34,
                 }}
               >
-                {orders && orders.length}
+                {stats && stats.totalOrders}
               </div>
             </div>
 
@@ -59,7 +47,7 @@ const Home = () => {
                   fontSize: 34,
                 }}
               >
-                {totalAmount}
+                10000+
               </div>
             </div>
           </div>
@@ -76,7 +64,7 @@ const Home = () => {
                   fontSize: 34,
                 }}
               >
-                {productsCount}
+                {stats && stats.totalProducts}
               </div>
             </div>
 
@@ -91,7 +79,7 @@ const Home = () => {
                   fontSize: 34,
                 }}
               >
-                {categories && categories.length}
+                {stats && stats.totalCategories}
               </div>
             </div>
 
@@ -106,7 +94,7 @@ const Home = () => {
                   fontSize: 34,
                 }}
               >
-                {users && users.length}
+                {stats && stats.totalUsers}
               </div>
             </div>
           </div>

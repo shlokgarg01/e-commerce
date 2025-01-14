@@ -63,7 +63,7 @@ const ProductList = () => {
 
   const handleScroll = () => {
     const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
-    if (scrollTop + clientHeight >= scrollHeight - 550 && pagination?.currentPage <= pagination?.totalPages) {
+    if (scrollTop + clientHeight >= scrollHeight - 1500 && pagination?.currentPage <= pagination?.totalPages) {
       setPage(prev => prev + 1);
     }
   }

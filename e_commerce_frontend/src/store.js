@@ -11,7 +11,7 @@ import {
 import {
   allUsersReducer,
   profileReducer,
-  userDetailsReduceer,
+  userDetailsReducer,
   userReducer,
 } from "./reducers/userReducer";
 import {
@@ -32,7 +32,7 @@ import {
   newCouponReducer,
 } from "./reducers/couponReducer";
 import { newSubCategoryReducer, subCategoriesForCategoryReducer, subCategoriesReducer, subCategoryDetailsReducer, subCategoryReducer } from "./reducers/subCategoryReducer";
-import { bannersReducer, updateBannerReducer } from "./reducers/constantsReducer";
+import { bannersReducer, statsReducer, updateBannerReducer } from "./reducers/constantsReducer";
 
 const reducer = combineReducers({
   products: productsReducer,
@@ -45,7 +45,7 @@ const reducer = combineReducers({
 
   allUsers: allUsersReducer,
   user: userReducer,
-  userDetails: userDetailsReduceer,
+  userDetails: userDetailsReducer,
   profile: profileReducer,
 
   allOrders: allOrdersReducer,
@@ -70,6 +70,7 @@ const reducer = combineReducers({
 
   banners: bannersReducer,
   updateBanners: updateBannerReducer,
+  stats: statsReducer,
 });
 
 let initialState = {};

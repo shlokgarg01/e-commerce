@@ -25,7 +25,7 @@ const OrderList = () => {
 
   const handleScroll = () => {
     const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
-    if (scrollTop + clientHeight >= scrollHeight - 550 && pagination?.currentPage <= pagination?.totalPages) {
+    if (scrollTop + clientHeight >= scrollHeight - 1500 && pagination?.currentPage <= pagination?.totalPages) {
       setPage(prev => prev + 1);
     }
   }
@@ -74,10 +74,10 @@ const OrderList = () => {
                     <tbody>
                       {orders && orders.length === 0 ? (
                         <tr>
-                          <td className="text-center fw-bold" colSpan={8}>No Orders Yet</td>
+                          <td className="text-center fw-bold" colSpan={10}>No Orders Yet</td>
                         </tr>
                       ) : (
-                        orders && orders.reverse().map((order, index) => (
+                        orders && orders.map((order, index) => (
                           <tr key={index} className="align-middle">
                             <th scope="row">{index + 1}.</th>
                             <td>{order._id}</td>

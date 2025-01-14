@@ -24,7 +24,7 @@ const UsersList = () => {
 
   const handleScroll = () => {
     const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
-    if (scrollTop + clientHeight >= scrollHeight - 550 && pagination?.currentPage <= pagination?.totalPages) {
+    if (scrollTop + clientHeight >= scrollHeight - 1500 && pagination?.currentPage <= pagination?.totalPages) {
       setPage(prev => prev + 1);
     }
   }
@@ -77,7 +77,7 @@ const UsersList = () => {
                     <tbody>
                       {users.length === 0 ? (
                         <tr>
-                          <td className="text-center fw-bold" colSpan={7}>No Users Yet</td>
+                          <td className="text-center fw-bold" colSpan={9}>No Users Yet</td>
                         </tr>
                       ) : users.map((user, index) => (
                         <tr key={index} className="align-middle">
@@ -88,7 +88,7 @@ const UsersList = () => {
                           <td>{user.contactNumber}</td>
                           <td>{user.totalOrderCount}</td>
                           <td>{user.oneMonthOrderCount}</td>
-                          <td>{getDateFromDateString(user.lastOrderDate)}</td>
+                          <td>{user.totalOrderCount === 0 ? "-" : getDateFromDateString(user.lastOrderDate)}</td>
                           <td
                             className={
                               user.role === "admin"

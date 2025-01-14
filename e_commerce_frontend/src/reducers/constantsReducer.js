@@ -3,6 +3,9 @@ import {
   GET_BANNERS_FAIL,
   GET_BANNERS_REQUEST,
   GET_BANNERS_SUCCESS,
+  GET_STATS_FAIL,
+  GET_STATS_REQUEST,
+  GET_STATS_SUCCESS,
   UPDATE_BANNERS_FAIL,
   UPDATE_BANNERS_REQUEST,
   UPDATE_BANNERS_RESET,
@@ -59,6 +62,33 @@ export const updateBannerReducer = (state = { banners: [] }, action) => {
       return {
         ...state,
         isUpdated: false,
+      };
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+    default:
+      return state;
+  }
+};
+
+export const statsReducer = (state = { stats: {} }, action) => {
+  switch (action.type) {
+    case GET_STATS_REQUEST:
+      return {
+        loading: true,
+        stats: {},
+      };
+    case GET_STATS_SUCCESS:
+      return {
+        loading: false,
+        stats: action.payload,
+      };
+    case GET_STATS_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
       };
     case CLEAR_ERRORS:
       return {

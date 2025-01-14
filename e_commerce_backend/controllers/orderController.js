@@ -94,19 +94,14 @@ exports.getAllOrders = catchAsyncErrors(async (req, res, next) => {
   const orders = await Order.find({
     orderStatus: { $ne: enums.ORDER_STATUS.PLACED },
   })
+  .sort({ createdAt: -1 })
   .populate("user")
   .skip(skip)
   .limit(limit);
 
-  let totalAmount = 0;
-  orders.forEach((order) => {
-    totalAmount += order.totalPrice;
-  });
-
   res.status(200).json({
     success: true,
     orders,
-    totalAmount,
     pagination: {
       totalOrders,
       totalPages,
