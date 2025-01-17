@@ -42,7 +42,7 @@ exports.getAllProducts = catchAsyncErrors(async (req, res) => {
   const resultsPerPage = 5;
   const productsCount = await Product.countDocuments();
 
-  const apiFeature = new ApiFeatures(Product.find(), req.query)
+  const apiFeature = new ApiFeatures(Product.find().sort({"order": 1}), req.query)
     .search()
     .filter();
   // .pagination(resultsPerPage);
@@ -207,7 +207,7 @@ exports.getCategoryProducts = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHandler("Category Not Found", 404));
   }
 
-  const products = await Product.find({ category: category.name });
+  const products = await Product.find({ category: category.name }).sort({"order": 1});
   if (!products) {
     return next(new ErrorHandler("Products Not Found", 404));
   }

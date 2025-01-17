@@ -69,3 +69,12 @@ exports.myAddresses = catchAsyncErrors(async (req, res, next) => {
     addresses,
   });
 });
+
+exports.getUserAddresses = catchAsyncErrors(async (req, res, next) => {
+  const addresses = await Address.find({ user: req.params.userId });
+
+  res.status(200).json({
+    success: true,
+    addresses,
+  });
+})

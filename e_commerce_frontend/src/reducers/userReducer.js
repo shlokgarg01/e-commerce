@@ -28,6 +28,9 @@ import {
   SEND_LOGIN_OTP_REQUEST,
   SEND_LOGIN_OTP_SUCCESS,
   SEND_LOGIN_OTP_FAIL,
+  GET_USER_ADDRESSES_REQUEST,
+  GET_USER_ADDRESSES_SUCCESS,
+  GET_USER_ADDRESSES_FAIL,
 } from "../constants/userConstants";
 
 export const userReducer = (state = { user: {} }, action) => {
@@ -198,6 +201,35 @@ export const profileReducer = (state = {}, action) => {
       return {
         ...state,
         isDeleted: false,
+      };
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+    default:
+      return state;
+  }
+};
+
+export const userAddressesReducer = (state = { addresses: [] }, action) => {
+  switch (action.type) {
+    case GET_USER_ADDRESSES_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case GET_USER_ADDRESSES_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        addresses: action.payload,
+      };
+    case GET_USER_ADDRESSES_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
       };
     case CLEAR_ERRORS:
       return {

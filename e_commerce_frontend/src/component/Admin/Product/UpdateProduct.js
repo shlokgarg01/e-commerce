@@ -29,6 +29,7 @@ const UpdateProduct = () => {
   const [subCategory, setSubCategory] = useState("");
   const [favourite, setFavourite] = useState(false);
   const [trending, setTrending] = useState(false);
+  const [order, setOrder] = useState(null);
   const [images, setImages] = useState([]);
   const [oldImages, setOldImages] = useState([]);
   const [imagePreview, setImagesPreview] = useState([]);
@@ -59,6 +60,7 @@ const UpdateProduct = () => {
       setCategory(product.category);
       setSubCategory(product.subCategory?._id);
       setTrending(product.trending);
+      setOrder(product.order);
       setFavourite(product.favourite);
       setOldImages(product.images);
 
@@ -85,7 +87,7 @@ const UpdateProduct = () => {
     if (isUpdated) {
       const scrollPosition = location.state?.scrollPosition || 0;
       alert.success("Product Updated Successfully");
-      navigate("/admin/products", {state: { scrollPosition }});
+      navigate("/admin/products", { state: { scrollPosition } });
       dispatch({ type: UPDATE_PRODUCT_RESET });
     }
 
@@ -115,6 +117,7 @@ const UpdateProduct = () => {
       subCategory,
       trending,
       favourite,
+      order,
       images: [],
     };
     images.forEach((image) => {
@@ -225,7 +228,7 @@ const UpdateProduct = () => {
                   onChange={(e) => setDescription(e.target.value)}
                   aria-label="description"
                   aria-describedby="basic-addon1"
-                  rows="1"
+                  rows="2"
                   cols="30"
                 />
               </div>
@@ -257,6 +260,24 @@ const UpdateProduct = () => {
                   </select>
                 </div>
 
+                <div className="col-sm-6 mb-3">
+                  <label className="form-label">Order</label>
+                  <div className="input-group">
+                    <input
+                      type="number"
+                      className="form-control"
+                      placeholder="Product Order"
+                      value={order}
+                      onChange={(e) => setOrder(e.target.value)}
+                      aria-label="order"
+                      aria-describedby="basic-addon1"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div>
                 {subCategories?.length > 0 && (
                   <div className="col-6 mb-3">
                     <label className="form-label">Sub Category</label>

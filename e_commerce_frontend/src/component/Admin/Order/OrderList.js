@@ -10,7 +10,7 @@ import MetaData from "../../layout/MetaData";
 import { useNavigate } from "react-router-dom";
 import { Enums } from "../../../utils/Enums";
 import { Capitalize } from "../../../helpers/StringHelpers";
-import { getDateFromDateString } from "../../../helpers/DateHelper";
+import { getDateTimeFromDateString } from "../../../helpers/DateHelper";
 import Loader from "../../layout/Loader/Loader";
 
 const OrderList = () => {
@@ -105,7 +105,7 @@ const OrderList = () => {
                                 ? "PAID"
                                 : "NOT PAID"}
                             </td>
-                            <td>{getDateFromDateString(order.createdAt)}</td>
+                            <td>{getDateTimeFromDateString(order.createdAt)}</td>
                             <td>
                               <input
                                 onClick={() =>

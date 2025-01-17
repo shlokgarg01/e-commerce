@@ -10,6 +10,7 @@ import MetaData from "../../layout/MetaData";
 import { Capitalize } from '../../../helpers/StringHelpers'
 import { getDateFromDateString } from "../../../helpers/DateHelper";
 import Loader from "../../layout/Loader/Loader";
+import '../Admin.css'
 
 const UsersList = () => {
   const alert = useAlert();
@@ -83,7 +84,7 @@ const UsersList = () => {
                         <tr key={index} className="align-middle">
                           <th scope="row">{index + 1}.</th>
                           <td>{user._id}</td>
-                          <td>{user.name}</td>
+                          <td id="productReviewCount" className="text-primary" onClick={() => window.open(`${window.location.origin}/admin/user/addresses/${user._id}`)}>{user.name}</td>
                           <td>{user.email}</td>
                           <td>{user.contactNumber}</td>
                           <td>{user.totalOrderCount}</td>

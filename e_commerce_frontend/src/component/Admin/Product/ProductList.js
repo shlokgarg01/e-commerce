@@ -140,6 +140,7 @@ const ProductList = () => {
                         <th scope="col">Max Quantity</th>
                         <th scope="col">Category</th>
                         <th scope="col">Sub Category</th>
+                        <th scope="col">Order</th>
                         <th scope="col">Action</th>
                         <th scope="col">Action</th>
                       </tr>
@@ -147,7 +148,7 @@ const ProductList = () => {
                     <tbody>
                       {filteredProducts.length === 0 ? (
                         <tr>
-                          <td className="text-center fw-bold" colSpan={11}>
+                          <td className="text-center fw-bold" colSpan={12}>
                             No Products Yet
                           </td>
                         </tr>
@@ -164,6 +165,7 @@ const ProductList = () => {
                             <td>{product?.maxOrderQuantity > 0 ? product?.maxOrderQuantity : null}</td>
                             <td>{product.category}</td>
                             <td>{product?.subCategory?.name}&nbsp;</td>
+                            <td>{product?.order}</td>
                             <td>
                               <input
                                 onClick={() => {

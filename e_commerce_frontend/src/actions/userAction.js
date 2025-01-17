@@ -26,6 +26,9 @@ import {
   SEND_LOGIN_OTP_REQUEST,
   SEND_LOGIN_OTP_SUCCESS,
   SEND_LOGIN_OTP_FAIL,
+  GET_USER_ADDRESSES_REQUEST,
+  GET_USER_ADDRESSES_SUCCESS,
+  GET_USER_ADDRESSES_FAIL,
 } from "../constants/userConstants";
 import axiosInstance from "../utils/Config";
 
@@ -162,6 +165,20 @@ export const deleteUser = (id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: DELETE_USER_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// Get Addresses of a User -- Admin
+export const getUserAddresses = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: GET_USER_ADDRESSES_REQUEST });
+    const {data} = await axiosInstance.get(`/api/v1/admin/address/user/${id}`)
+    dispatch({ type: GET_USER_ADDRESSES_SUCCESS, payload: data.addresses });
+  } catch (error) {
+    dispatch({
+      type: GET_USER_ADDRESSES_FAIL,
       payload: error.response.data.message,
     });
   }

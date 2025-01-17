@@ -6,7 +6,7 @@ import { getAllCategories, clearErrors } from "../../../actions/categoryAction";
 import { useNavigate } from "react-router-dom";
 import { NEW_PRODUCT_RESET } from "../../../constants/productConstants";
 import { createProduct } from "../../../actions/productAction";
-import {getSubCategoryByCategory} from '../../../actions/subCategoryAction'
+import { getSubCategoryByCategory } from '../../../actions/subCategoryAction'
 
 const NewProduct = () => {
   const dispatch = useDispatch();
@@ -25,10 +25,11 @@ const NewProduct = () => {
   const [subCategory, setSubCategory] = useState("");
   const [favourite, setFavourite] = useState(false);
   const [trending, setTrending] = useState(false);
+  const [order, setOrder] = useState(null);
 
   const { categories } = useSelector((state) => state.categories);
   const { error, success } = useSelector((state) => state.newProduct);
-  const {subCategories} = useSelector(state => state.subCategoriesByCategory)
+  const { subCategories } = useSelector(state => state.subCategoriesByCategory)
 
   useEffect(() => {
     if (error) {
@@ -48,8 +49,8 @@ const NewProduct = () => {
   const submitForm = (e) => {
     e.preventDefault();
 
-    const myForm= {
-      name, price, discount, description, stock, maxOrderQuantity, category, subCategory, trending, favourite, images: []
+    const myForm = {
+      name, price, discount, description, stock, maxOrderQuantity, category, subCategory, trending, favourite, order, images: []
     }
     images.forEach((image) => {
       myForm.images.push(image);
@@ -123,8 +124,9 @@ const NewProduct = () => {
                   />
                 </div>
               </div>
+
               <div className="row">
-                <div className="col-6 mb-3">
+                <div className="col-sm-6 mb-3">
                   <div className="input-group mb-3">
                     <input
                       type="number"
@@ -138,7 +140,7 @@ const NewProduct = () => {
                     />
                   </div>
                 </div>
-                <div className="col-6 mb-3">
+                <div className="col-sm-6 mb-3">
                   <div className="input-group mb-3">
                     <input
                       type="number"
@@ -153,6 +155,7 @@ const NewProduct = () => {
                   </div>
                 </div>
               </div>
+
               <div className="input-group mb-3">
                 <div className="input-group mb-3">
                   <textarea
@@ -169,12 +172,12 @@ const NewProduct = () => {
               </div>
 
               <div className="row">
-                <div className="col-6 mb-3">
+                <div className="col-sm-6 mb-3">
                   <div className="input-group mb-3">
                     <select
                       onChange={(e) => {
                         const selected_element = e.target.childNodes[e.target.selectedIndex]
-                        const category_id =  selected_element.getAttribute('id');
+                        const category_id = selected_element.getAttribute('id');
                         setCategory(e.target.value)
                         fetchSubCategories(category_id)
                       }}
@@ -190,27 +193,42 @@ const NewProduct = () => {
                   </div>
                 </div>
 
-                {subCategories?.length > 0 && (
-                <div className="col-6 mb-3">
+                <div className="col-sm-6 mb-3">
                   <div className="input-group mb-3">
-                    <select
-                      onChange={(e) => {
-                        const selected_element = e.target.childNodes[e.target.selectedIndex]
-                        const subCategory_id =  selected_element.getAttribute('id');
-                        setSubCategory(subCategory_id)
-                      }}
-                      className="form-select form-select"
-                    >
-                      <option value="">Choose Sub Category</option>
-                      {subCategories.map((subcategory) => (
-                        <option key={subcategory._id} id={subcategory._id} value={subcategory.name}>
-                          {subcategory.name}
-                        </option>
-                      ))}
-                    </select>
+                    <input
+                      type="number"
+                      className="form-control"
+                      placeholder="Product Order"
+                      value={order}
+                      onChange={(e) => setOrder(e.target.value)}
+                      aria-label="order"
+                      aria-describedby="basic-addon1"
+                      required
+                    />
                   </div>
                 </div>
-              )}
+
+                {subCategories?.length > 0 && (
+                  <div className="col-6 mb-3">
+                    <div className="input-group mb-3">
+                      <select
+                        onChange={(e) => {
+                          const selected_element = e.target.childNodes[e.target.selectedIndex]
+                          const subCategory_id = selected_element.getAttribute('id');
+                          setSubCategory(subCategory_id)
+                        }}
+                        className="form-select form-select"
+                      >
+                        <option value="">Choose Sub Category</option>
+                        {subCategories.map((subcategory) => (
+                          <option key={subcategory._id} id={subcategory._id} value={subcategory.name}>
+                            {subcategory.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div className="form-floating mb-3">

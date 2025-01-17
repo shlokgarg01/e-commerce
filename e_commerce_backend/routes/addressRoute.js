@@ -6,6 +6,7 @@ const {
   updateAddress,
   deleteAddress,
   getAddressDetails,
+  getUserAddresses,
 } = require("../controllers/addressController");
 const router = express.Router();
 
@@ -16,5 +17,8 @@ router
 .delete(isAuthenticatedUser, deleteAddress);
 router.route("/address/me").get(isAuthenticatedUser, myAddresses);
 router.route("/address/:id").get(isAuthenticatedUser, getAddressDetails);
+
+// Admin routes
+router.route("/admin/address/user/:userId").get(isAuthenticatedUser, getUserAddresses);
 
 module.exports = router;

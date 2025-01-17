@@ -84,11 +84,29 @@ exports.getStats = catchAsyncErrors(async (req, res, next) => {
   const totalCategories = await Category.countDocuments();
   const totalUsers = await User.countDocuments();
 
+  const thirtyDaysOrderAmount = await Order.aggregate([
+    {
+      $match: {
+        createdAt: {
+          $gte: new Date(new Date().setDate(new Date().getDate() - 30))
+        }
+      }
+    },
+    {
+      $group: {
+        _id: null,
+        totalAmount: { $sum: "$totalPrice" }
+      }
+    }
+  ])
+  
+
   return res.status(200).json({
     success: true,
     totalCategories,
     totalOrders,
     totalProducts,
     totalUsers,
+    thirtyDaysOrderAmount: thirtyDaysOrderAmount[0].totalAmount,
   });
 });

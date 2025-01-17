@@ -37,7 +37,7 @@ const Home = () => {
             </div>
 
             <div className="d-flex flex-column justify-content-center align-items-center mx-4">
-            <b className="mb-2" style={{fontSize: 22}}>Total Order Amount</b>
+            <b className="mb-2" style={{fontSize: 22}}>Last Month Amount</b>
               <div
                 className="productsCount rounded-circle fw-bold d-flex flex-row justify-content-center align-items-center"
                 style={{
@@ -47,7 +47,7 @@ const Home = () => {
                   fontSize: 34,
                 }}
               >
-                10000+
+                {stats?.thirtyDaysOrderAmount}
               </div>
             </div>
           </div>

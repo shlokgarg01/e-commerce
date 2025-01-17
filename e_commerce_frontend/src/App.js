@@ -28,6 +28,7 @@ import SubCategoryList from "./component/Admin/SubCategory/SubCategoryList";
 import UpdateSubCategory from "./component/Admin/SubCategory/UpdateSubCategory";
 import NewSubCategory from "./component/Admin/SubCategory/NewSubCategory";
 import Banners from "./component/Admin/Constants/Banners";
+import UserAddresses from "./component/Admin/User/UserAddresses";
 
 export default function App() {
   useEffect(() => {
@@ -54,6 +55,7 @@ export default function App() {
 
           <Route exact path="/admin/users" element={<UsersList />} />
           <Route exact path="/admin/user/:id" element={<UpdateUser />} />
+          <Route exact path="/admin/user/addresses/:id" element={<UserAddresses />} />
 
           <Route exact path="/admin/categories" element={<CategoryList />} />
           <Route exact path="/admin/category" element={<NewCategory />} />
