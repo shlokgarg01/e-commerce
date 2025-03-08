@@ -15,13 +15,13 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: false,
       default: "dummyemail@parchunking.com",
-      unique: true,
+      // unique: true,
       validate: [validator.isEmail, "Please enter a valid email"],
     },
     contactNumber: {
       type: String,
       required: [true, "Please enter your Contact Number."],
-      unique: true,
+      // unique: true,
       validate: {
         validator: function (number) {
           var regex = /^[1-9][0-9]{9}$/g;
@@ -52,6 +52,10 @@ const userSchema = new mongoose.Schema(
     role: {
       type: String,
       default: "user",
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false,
     },
     resetPasswordToken: String,
     resetPasswordExpire: Date,

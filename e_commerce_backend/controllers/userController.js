@@ -7,7 +7,6 @@ const { sendEmail } = require("../utils/sendNotification");
 const crypto = require("crypto");
 const { generateOTP, otpHash, sendOTP } = require("../utils/otp");
 const Enums = require("../utils/enums");
-const cloudinary = require('cloudinary')
 
 // Register a User
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
@@ -182,7 +181,7 @@ exports.getAllUsers = catchAsyncErrors(async (req, res, next) => {
 
   const page = parseInt(req.query.page, 10) || 1; // Default to page 1
   const limit = parseInt(req.query.limit, 10) || 20; // Default to 20 products per page
-  
+
   const skip = (page - 1) * limit;
   const totalUsers = await User.countDocuments();
   const totalPages = Math.ceil(totalUsers / limit);
@@ -214,9 +213,9 @@ exports.getAllUsers = catchAsyncErrors(async (req, res, next) => {
       },
     },
   ])
-  .sort({ createdAt: -1 })
-  .skip(skip)
-  .limit(limit);
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit);
 
   res.status(200).json({
     success: true,
@@ -285,7 +284,7 @@ exports.deleteUser = catchAsyncErrors(async (req, res, next) => {
 // send OTP for registration
 exports.sendOTPForRegistration = catchAsyncErrors(async (req, res, next) => {
   const { contactNumber } = req.body;
-  const user = await User.findOne({ contactNumber });
+  const user = await User.findOne({ contactNumber, isDeleted: false });
   if (user) {
     return next(
       new ErrorHandler(
@@ -360,17 +359,17 @@ exports.registerUserViaOTP = catchAsyncErrors(async (req, res, next) => {
       new ErrorHandler("The entered pincode is not serviceable right now.", 400)
     );
   }
-  
+
   const user = await User.create({
     name,
     email,
     contactNumber,
     pincode
     // avatar: {
-      //   public_id: "This is a sample id",
-      //   url: "This is a sample url",
-      // },
-    });
+    //   public_id: "This is a sample id",
+    //   url: "This is a sample url",
+    // },
+  });
   await SignupOTP.deleteMany({ contactNumber });
   sendToken(user, 201, res);
 });
@@ -378,7 +377,7 @@ exports.registerUserViaOTP = catchAsyncErrors(async (req, res, next) => {
 // send OTP for Login
 exports.sendOTPForLogin = catchAsyncErrors(async (req, res, next) => {
   const { contactNumber } = req.body;
-  const user = await User.findOne({ contactNumber });
+  const user = await User.findOne({ contactNumber, isDeleted: false });
   if (!user) {
     return next(
       new ErrorHandler(
@@ -387,7 +386,7 @@ exports.sendOTPForLogin = catchAsyncErrors(async (req, res, next) => {
       )
     );
   }
-  
+
   let otp = generateOTP();
   if (contactNumber === "8307747802") {
     otp = "123456"
@@ -426,11 +425,35 @@ exports.authenticateUserViaOTPForLogin = catchAsyncErrors(async (req, res, next)
     return next(new ErrorHandler("Incorrect OTP. Please try again.", 400));
   }
 
-  const user = await User.findOne({ contactNumber });
-  if(!user) {
+  const user = await User.findOne({ contactNumber, isDeleted: false });
+  if (!user) {
     return next(new ErrorHandler("OTP verified, but no user found for the given Contact Number.", 400))
   }
 
   await SignupOTP.deleteMany({ contactNumber });
   sendToken(user, 201, res);
+});
+
+// delete user account
+exports.deleteUserAccount = catchAsyncErrors(async (req, res, next) => {
+  const userId = req.body.id
+  const user = await User.findById(userId);
+
+  if (!user) {
+    return next(
+      new ErrorHandler(`User does not exist with id: ${req.params.id}`, 404)
+    );
+  }
+
+  await User.findByIdAndUpdate(userId, { isDeleted: true }, {
+    new: true,
+    runValidators: true,
+    useFindAndModify: false,
+  });
+
+  res.status(200).json({
+    message: "User Deleted",
+    success: true,
+    user,
+  });
 });

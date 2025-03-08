@@ -17,6 +17,7 @@ const {
   sendOTPForLogin,
   authenticateUserViaOTPForRegistration,
   authenticateUserViaOTPForLogin,
+  deleteUserAccount,
 } = require("../controllers/userController");
 const { isAuthenticatedUser, authorizeRoles } = require("../middleware/auth");
 const router = express.Router();
@@ -48,5 +49,7 @@ router
   .get(isAuthenticatedUser, authorizeRoles("admin"), getSingleUser)
   .put(isAuthenticatedUser, authorizeRoles("admin"), updateUserRole)
   .delete(isAuthenticatedUser, authorizeRoles("admin"), deleteUser);
+
+router.route("/user/delete").post(isAuthenticatedUser, deleteUserAccount)
 
 module.exports = router;
