@@ -284,7 +284,11 @@ exports.deleteUser = catchAsyncErrors(async (req, res, next) => {
 // send OTP for registration
 exports.sendOTPForRegistration = catchAsyncErrors(async (req, res, next) => {
   const { contactNumber } = req.body;
-  const user = await User.findOne({ contactNumber, isDeleted: false });
+  const user = await User.findOne({ 
+    contactNumber, 
+    $or: [{ isDeleted: false }, { isDeleted: { $exists: false } }] 
+  });
+
   if (user) {
     return next(
       new ErrorHandler(
@@ -377,7 +381,10 @@ exports.registerUserViaOTP = catchAsyncErrors(async (req, res, next) => {
 // send OTP for Login
 exports.sendOTPForLogin = catchAsyncErrors(async (req, res, next) => {
   const { contactNumber } = req.body;
-  const user = await User.findOne({ contactNumber, isDeleted: false });
+  const user = await User.findOne({ 
+    contactNumber, 
+    $or: [{ isDeleted: false }, { isDeleted: { $exists: false } }] 
+  });
   if (!user) {
     return next(
       new ErrorHandler(
@@ -425,7 +432,11 @@ exports.authenticateUserViaOTPForLogin = catchAsyncErrors(async (req, res, next)
     return next(new ErrorHandler("Incorrect OTP. Please try again.", 400));
   }
 
-  const user = await User.findOne({ contactNumber, isDeleted: false });
+  const user = await User.findOne({ 
+    contactNumber, 
+    $or: [{ isDeleted: false }, { isDeleted: { $exists: false } }] 
+  });
+
   if (!user) {
     return next(new ErrorHandler("OTP verified, but no user found for the given Contact Number.", 400))
   }
