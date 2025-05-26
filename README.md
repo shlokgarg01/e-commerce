@@ -12,6 +12,7 @@
 - ``sudo apt upgrade``
 - ``sudo apt install nodejs``
 - ``sudo apt install git``
+- ``sudo apt install npm``
 - ``git clone <repo_url>``
 - ``cd <repo>``
 - ``npm i``
