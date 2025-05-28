@@ -28,6 +28,31 @@
 - ``sudo netfilter-persistent save <comment>: to save the changes``
 ``pm2 restart app.js``
 
+
+### To Map Domain to your VPS Server's IP
+- ``sudo apt-get install nginx``
+- ``nano /etc/nginx/sites-available/domain.com``
+- ``  server {
+    listen 80;
+    root /var/www/html;
+    index index.html index.htm index.nginx-debian.html;
+            server_name yourDomain.com www.yourDomain.com;
+            location / {
+                    proxy_pass http://localhost:3000;
+                    proxy_http_version 1.1;
+                    proxy_set_header Upgrade $http_upgrade;
+                    proxy_set_header Connection 'upgrade';
+                    proxy_set_header Host $host;
+                    proxy_cache_bypass $http_upgrade;
+                }
+    }`` -- In this, just change your PORT in proxy_pass
+- ``Change the running PORT of your application to 80 & everything will work perfectly fine``
+
+- ``sudo lsof -i :80`` -- To check NGINX status
+- ``sudo systemctl stop nginx`` -- To stop NGINX server
+For reference, refer this link
+- https://www.thapatechnical.com/2023/01/how-to-host-react-js-website-live-on.html
+
 ### Extra Info & Useful Commands
 - ``pm2 kill``
 - ``pm2 flush``
