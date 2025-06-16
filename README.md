@@ -26,7 +26,9 @@
 - ``sudo apt install netfilter-persistent <comment>: used to persist the changes of the above table``
 - ``sudo iptables -L <comment>: to verify that the changes are still present``
 - ``sudo netfilter-persistent save <comment>: to save the changes``
-``pm2 restart app.js``
+- ``pm2 restart app.js``
+- ``sudo systemctl status mongod``
+- ``sudo systemctl start mongod``
 
 
 ### To Map Domain to your VPS Server's IP
