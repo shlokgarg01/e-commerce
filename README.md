@@ -27,9 +27,8 @@
 - ``sudo iptables -L <comment>: to verify that the changes are still present``
 - ``sudo netfilter-persistent save <comment>: to save the changes``
 - ``pm2 restart app.js``
-- ``sudo systemctl status mongod``
 - ``sudo systemctl start mongod``
-
+- ``sudo systemctl stop nginx``
 
 ### To Map Domain to your VPS Server's IP
 - ``sudo apt-get install nginx``
@@ -49,17 +48,43 @@
                 }
     }`` -- In this, just change your PORT in proxy_pass
 - ``Change the running PORT of your application to 80 & everything will work perfectly fine``
-
 - ``sudo lsof -i :80`` -- To check NGINX status
 - ``sudo systemctl stop nginx`` -- To stop NGINX server
 For reference, refer this link
-- https://www.thapatechnical.com/2023/01/how-to-host-react-js-website-live-on.html
+- [Reference Blog](https://www.thapatechnical.com/2023/01/how-to-host-react-js-website-live-on.html)
+
 
 ### Extra Info & Useful Commands
 - ``pm2 kill``
 - ``pm2 flush``
 - ``pm2 logs``
 - ``pm2 restart``
+
+
+### MongoDB Setup on production
+- Install mongod
+- Then run this to start the mongo shell - ``mongosh``
+- Switch to your database - ``use <db_name>``
+- Create a database admin user for all auth based access
+    - ``db.createUser({ user: "adminUser", pwd: "strongPassword123", roles: [ { role: "userAdminAnyDatabase", db: "admin" }, "readWriteAnyDatabase" ] })``
+- Once the database User is created, then we need to enable the authentication on the database
+    - sudo nano /etc/mongod.conf
+    - Enable the below in the above file
+        - ```
+            security:
+                authorization: "enabled"
+            ```
+    - Then start or restart mongodb as per your need ``sudo systemctl restart mongod`` or ``sudo systemctl start mongod``
+
+The mongo server is up & running perfectly fine.
+
+#### **Useful commands**
+1. To start the mongo shell as an authenticated user - ``mongosh -u <user_name> -p --authenticationDatabase <db_name>`` This will ask you the password once you press enter.
+2. Get all users in the db - ``db.getUsers()``
+3. MongoDB Status - ``sudo systemctl status mongod``
+4. MongoDB Start - ``sudo systemctl start mongod``
+5. MongoDB Stop - ``sudo systemctl stop mongod``
+
 
 ### Errors Faced
 - On checking logs using ``pm2 logs`` ifyou get this error `` session: options?.session ``, then upgrade nodejs to latest version using these 2 commands `` sudo npm install -g n`` `` sudo n stable `` and restart the server (ref - https://www.hostingadvice.com/how-to/update-node-js-latest-version/)
