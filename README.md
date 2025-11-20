@@ -51,7 +51,10 @@
 - Then run this to start the mongo shell - ``mongosh``
 - Switch to your database - ``use <db_name>``
 - Create a database admin user for all auth based access
-    - ``db.createUser({ user: "adminUser", pwd: "strongPassword123", roles: [ { role: "userAdminAnyDatabase", db: "admin" }, { role: "readWriteAnyDatabase", db: "admin" } ] })``
+- 
+    ```
+    db.createUser({ user: "user", pwd: "password", roles: [ { role: "userAdminAnyDatabase", db: "admin" }, { role: "readWriteAnyDatabase", db: "admin" } ] })
+    ```
 - Once the database User is created, then we need to enable the authentication on the database
     - sudo nano /etc/mongod.conf
     - Enable the next 2 changes in the above file
