@@ -62,18 +62,37 @@ For reference, refer this link
 
 
 ### MongoDB Setup on production
-- Install mongod
+- Install mongod using the below commands
+  ```
+      curl -fsSL https://www.mongodb.org/static/pgp/server-8.0.asc | \
+      sudo gpg -o /usr/share/keyrings/mongodb-server-8.0.gpg --dearmor
+        
+      echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg ] \
+      https://repo.mongodb.org/apt/ubuntu noble/mongodb-org/8.0 multiverse" | \
+      sudo tee /etc/apt/sources.list.d/mongodb-org-8.0.list
+        
+      sudo apt update
+      sudo apt install -y mongodb-org
+        
+      sudo systemctl start mongod
+      sudo systemctl enable mongod
+  ```
+
 - Then run this to start the mongo shell - ``mongosh``
 - Switch to your database - ``use <db_name>``
 - Create a database admin user for all auth based access
     - ``db.createUser({ user: "adminUser", pwd: "strongPassword123", roles: [ { role: "userAdminAnyDatabase", db: "admin" }, { role: "readWriteAnyDatabase", db: "admin" } ] })``
 - Once the database User is created, then we need to enable the authentication on the database
     - sudo nano /etc/mongod.conf
-    - Enable the below in the above file
-        - ```
-            security:
-                authorization: "enabled"
-            ```
+    - Enable the next 2 changes in the above file
+      ```
+          security:
+            authorization: "enabled"
+      ```
+    - Also allow access to the server db from everywhere.
+      ```
+          bindIp: 127.0.0.1 -> bindIp: 0.0.0.0 // Replace the IP in this line
+      ```
     - Then start or restart mongodb as per your need ``sudo systemctl restart mongod`` or ``sudo systemctl start mongod``
 
 The mongo server is up & running perfectly fine.
